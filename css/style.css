@@ -1,0 +1,894 @@
+﻿/* ============================================
+   RESET CSS & BASE STYLES
+   ============================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #ffffff;
+    overflow-x: hidden;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul {
+    list-style: none;
+}
+
+/* ============================================
+   VARIABLES CSS (Couleurs)
+   ============================================ */
+
+:root {
+    --ocean-blue: #006994;
+    --ocean-blue-dark: #004d6b;
+    --ocean-blue-light: #0088b8;
+    --white: #ffffff;
+    --sand: #f5f1e8;
+    --sand-light: #faf8f3;
+    --button-yellow: #ffa500;
+    --button-gold: #ff8c00;
+    --text-dark: #2c3e50;
+    --overlay-dark: rgba(0, 0, 0, 0.5);
+}
+
+/* ============================================
+   HEADER - Position Fixe
+   ============================================ */
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    background-image: url("../assets/images/hero-full.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+header nav {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+
+.logo img {
+    height: 50px;
+    width: auto;
+}
+
+.menu {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.menu li a {
+    color: var(--white);
+    font-weight: 500;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+    position: relative;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.menu li a::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--button-yellow);
+    transition: width 0.3s ease;
+}
+
+.menu li a:hover {
+    color: var(--button-yellow);
+}
+
+.menu li a:hover::after {
+    width: 100%;
+}
+
+a.book-now,
+.book-now {
+    display: inline-block;
+    text-decoration: none;
+    text-align: center;
+    background: linear-gradient(135deg, var(--button-yellow), var(--button-gold));
+    color: var(--white);
+    border: none;
+    padding: 0.75rem 2rem;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 165, 0, 0.3);
+    font-family: 'Raleway', sans-serif;
+    letter-spacing: 0.5px;
+}
+
+.book-now:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 165, 0, 0.4);
+    background: linear-gradient(135deg, var(--button-gold), var(--button-yellow));
+}
+
+/* ============================================
+   HERO SECTION - Image Plein Écran
+   ============================================ */
+
+/* Hero: fixed parallax anchor – full viewport, content centered */
+.hero {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    min-height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url("../assets/images/hero-full.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    z-index: 0;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0.5) 50%, rgba(0, 0, 0, 0.6) 100%);
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    color: var(--white);
+    padding: 2rem;
+    max-width: 800px;
+}
+
+.hero-content h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 4.5rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    text-shadow: 3px 3px 20px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 0, 0, 0.7);
+    line-height: 1.2;
+    animation: fadeInUp 1s ease;
+    color: var(--white);
+    letter-spacing: 1px;
+}
+
+.hero-subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.5rem;
+    margin-bottom: 2.5rem;
+    text-shadow: 2px 2px 15px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 0, 0, 0.6);
+    animation: fadeInUp 1s ease 0.2s both;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+}
+
+a.hero-button,
+.hero-button {
+    display: inline-block;
+    text-decoration: none;
+    text-align: center;
+    background: linear-gradient(135deg, var(--button-yellow), var(--button-gold));
+    color: var(--white);
+    border: none;
+    padding: 1rem 3rem;
+    border-radius: 30px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(255, 165, 0, 0.4);
+    animation: fadeInUp 1s ease 0.4s both;
+    font-family: 'Raleway', sans-serif;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.hero-button:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 6px 30px rgba(255, 165, 0, 0.5);
+    background: linear-gradient(135deg, var(--button-gold), var(--button-yellow));
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================================
+   ABOUT US SECTION – Même fond que Our Adventures (blanc)
+   ============================================ */
+
+.about {
+    position: relative;
+    width: 100%;
+    padding: 4rem 2rem;
+    background: var(--white);
+    z-index: 2;
+}
+
+.about-content {
+    position: relative;
+    z-index: 2;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.about-content h2 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2.5rem;
+    color: var(--ocean-blue-dark);
+    margin-bottom: 2rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.about-content p {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: var(--text-dark);
+    margin-bottom: 2rem;
+    font-weight: 400;
+    letter-spacing: 0.3px;
+}
+
+.about-content button {
+    background: linear-gradient(135deg, var(--ocean-blue), var(--ocean-blue-light));
+    color: var(--white);
+    border: none;
+    padding: 1rem 2.5rem;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 105, 148, 0.25);
+    font-family: 'Raleway', sans-serif;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.about-content button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 165, 0, 0.4);
+    background: linear-gradient(135deg, var(--button-yellow), var(--button-gold));
+}
+
+/* ============================================
+   ADVENTURES SECTION - Cartes (fond blanc)
+   ============================================ */
+
+.adventures {
+    position: relative;
+    padding: 6rem 2rem;
+    background: var(--white);
+    z-index: 2;
+}
+
+.adventures h2 {
+    position: relative;
+    z-index: 2;
+    font-family: 'Poppins', sans-serif;
+    font-size: 2.5rem;
+    color: var(--ocean-blue-dark);
+    text-align: center;
+    margin-bottom: 3rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.adventures-grid {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    align-items: stretch;
+}
+
+.adventure-card {
+    display: flex;
+    flex-direction: column;
+    min-height: 420px;
+    background: var(--white);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12), 0 3px 10px rgba(0, 0, 0, 0.08);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+    position: relative;
+    border: none;
+}
+
+.adventure-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(0, 105, 148, 0.05) 0%, rgba(0, 105, 148, 0.02) 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.adventure-card:hover {
+    box-shadow: 0 20px 50px rgba(0, 105, 148, 0.25), 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.adventure-card:hover::before {
+    opacity: 1;
+}
+
+.adventure-card img {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    z-index: 0;
+}
+
+.adventure-card:hover img {
+    transform: scale(1.15);
+    filter: brightness(1.1) saturate(1.1);
+}
+
+.adventure-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 280px;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.3) 100%);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.adventure-card h3 {
+    padding: 1.5rem 1rem 0.75rem;
+    font-family: 'Poppins', sans-serif;
+    font-size: clamp(1.05rem, 1.1vw, 1.35rem);
+    color: var(--ocean-blue-dark);
+    text-align: center;
+    font-weight: 600;
+    position: relative;
+    z-index: 2;
+    transition: color 0.3s ease;
+    letter-spacing: 0.3px;
+}
+
+.adventure-card:hover h3 {
+    color: var(--ocean-blue);
+}
+
+.adventure-card button,
+.adventure-card-button {
+    width: 100%;
+    margin-top: auto;
+    min-height: 52px;
+    line-height: 1.2;
+    box-sizing: border-box;
+    background: linear-gradient(135deg, var(--ocean-blue), var(--ocean-blue-light));
+    color: var(--white);
+    border: none;
+    padding: 1.2rem;
+    border-radius: 0;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    z-index: 2;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    overflow: hidden;
+    font-family: 'Raleway', sans-serif;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+
+.adventure-card button::before,
+.adventure-card-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.adventure-card button:hover::before,
+.adventure-card-button:hover::before {
+    left: 100%;
+}
+
+.adventure-card:hover button,
+.adventure-card:hover .adventure-card-button {
+    background: linear-gradient(135deg, var(--button-yellow), var(--button-gold));
+    box-shadow: 0 5px 15px rgba(255, 165, 0, 0.4);
+}
+
+/* ============================================
+   PADI COURSES SECTION – Panel (scrolls over hero)
+   ============================================ */
+
+.padi-courses {
+    position: relative;
+    min-height: 70vh;
+    padding: 7rem 2rem;
+    background: var(--sand-light);
+    z-index: 2;
+}
+
+.padi-courses h2 {
+    position: relative;
+    z-index: 2;
+    font-family: 'Poppins', sans-serif;
+    font-size: 2.5rem;
+    color: var(--ocean-blue-dark);
+    text-align: center;
+    margin-bottom: 3rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.courses-content {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: stretch;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.courses-image-wrap {
+    min-height: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
+}
+
+.courses-content img {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.45s ease, filter 0.45s ease;
+}
+
+.courses-image-wrap:hover img {
+    transform: scale(1.03);
+    filter: brightness(1.03);
+}
+
+.courses-list {
+    background: var(--white);
+    padding: 2.3rem;
+    border-radius: 12px;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.courses-description {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: var(--text-dark);
+    margin-bottom: 1.25rem;
+}
+
+.courses-highlights {
+    list-style: none;
+    margin-bottom: 1.5rem;
+}
+
+.courses-highlights li {
+    padding: 0.55rem 0;
+    padding-left: 2.1rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    color: var(--text-dark);
+    position: relative;
+    line-height: 1.55;
+    font-weight: 400;
+    letter-spacing: 0.1px;
+}
+
+.courses-highlights li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--ocean-blue);
+    font-weight: bold;
+    font-size: 1.5rem;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--ocean-blue-light), var(--ocean-blue));
+    color: var(--white);
+    border-radius: 50%;
+    font-size: 1rem;
+}
+
+.courses-button.hero-button {
+    animation: none;
+    align-self: flex-start;
+    padding: 0.85rem 2rem;
+    font-size: 1rem;
+    box-shadow: 0 4px 18px rgba(255, 165, 0, 0.36);
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+
+footer {
+    position: relative;
+    z-index: 3;
+    background-color: var(--ocean-blue-dark);
+    color: var(--white);
+    padding: 3rem 2rem 1rem;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 3rem;
+    max-width: 1200px;
+    margin: 0 auto 2rem;
+}
+
+.footer-content h3 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--button-yellow);
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+.footer-content p {
+    font-family: 'Open Sans', sans-serif;
+    margin-bottom: 0.75rem;
+    line-height: 1.8;
+    font-weight: 400;
+    letter-spacing: 0.2px;
+}
+
+.footer-content a {
+    color: var(--white);
+    transition: color 0.3s ease;
+}
+
+.footer-content a:hover {
+    color: var(--button-yellow);
+}
+
+.social-media ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.social-media ul li a {
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.social-media ul li a:hover {
+    transform: translateX(5px);
+    color: var(--button-yellow);
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-bottom p {
+    font-family: 'Open Sans', sans-serif;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+    font-weight: 400;
+    letter-spacing: 0.2px;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN - MOBILE FIRST
+   ============================================ */
+
+/* Tablettes — 2 cartes par ligne */
+@media (max-width: 1024px) {
+    .adventures-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
+        max-width: 900px;
+    }
+}
+
+/* Tablettes */
+@media (max-width: 768px) {
+    header nav {
+        flex-wrap: wrap;
+        padding: 1rem;
+    }
+
+    .menu {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+        margin-top: 1rem;
+        gap: 1rem;
+    }
+
+    .book-now {
+        padding: 0.6rem 1.5rem;
+        font-size: 0.9rem;
+    }
+
+    .hero-content h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.2rem;
+    }
+
+    .hero-button {
+        padding: 0.9rem 2rem;
+        font-size: 1rem;
+    }
+
+    .about {
+        background-attachment: scroll;
+    }
+
+    .about,
+    .adventures,
+    .padi-courses {
+        padding: 4rem 1.5rem;
+    }
+
+    .about-content h2,
+    .adventures h2,
+    .padi-courses h2 {
+        font-size: 2rem;
+    }
+
+    .courses-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .courses-image-wrap {
+        min-height: 300px;
+    }
+
+    .courses-content img {
+        height: 300px;
+        min-height: 300px;
+    }
+
+    .courses-button.hero-button {
+        align-self: center;
+    }
+
+    .adventures-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+}
+
+/* Mobiles */
+@media (max-width: 480px) {
+    header nav {
+        padding: 0.75rem;
+    }
+
+    .logo img {
+        height: 40px;
+    }
+
+    .menu {
+        flex-direction: column;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+    }
+
+    .menu li a {
+        font-size: 0.9rem;
+    }
+
+    .book-now {
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+
+    .hero {
+        min-height: 100vh;
+        min-height: 500px;
+        background-attachment: scroll;
+    }
+
+    .hero-content {
+        padding: 1rem;
+    }
+
+    .hero-content h1 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .hero-button {
+        padding: 0.8rem 1.5rem;
+        font-size: 0.95rem;
+    }
+
+    .about,
+    .adventures,
+    .padi-courses {
+        padding: 3rem 1rem;
+    }
+
+    .about-content h2,
+    .adventures h2,
+    .padi-courses h2 {
+        font-size: 1.75rem;
+        margin-bottom: 2rem;
+    }
+
+    .about-content p {
+        font-size: 1rem;
+    }
+
+    .adventures-grid {
+        gap: 1rem;
+    }
+
+    .adventure-card h3 {
+        font-size: 1.25rem;
+        padding: 1.5rem 1rem 0.75rem;
+    }
+    
+    .adventure-card img {
+        height: 220px;
+    }
+    
+    .adventure-card::after {
+        height: 220px;
+    }
+
+    .courses-image-wrap {
+        min-height: 250px;
+    }
+
+    .courses-content img {
+        height: 250px;
+        min-height: 250px;
+    }
+
+    .courses-list {
+        padding: 1.5rem;
+    }
+
+    .courses-highlights li {
+        font-size: 1rem;
+        padding-left: 2rem;
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    footer {
+        padding: 2rem 1rem 1rem;
+    }
+}
+
+/* Grands écrans */
+@media (min-width: 1400px) {
+    .hero-content h1 {
+        font-size: 4.5rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.75rem;
+    }
+}

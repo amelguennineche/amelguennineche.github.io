@@ -1,0 +1,131 @@
+﻿/* ============================================
+   DAHAB DAY TRIP PAGE – OVERRIDES & SUNSET ACCENTS
+   Consistent with main site; warm orange/gold accents.
+   ============================================ */
+
+/* Hero: Dahab image, warm overlay */
+.trip-hero--dahab {
+    background-image: url("../assets/images/dahab.jpg");
+}
+
+.trip-hero--dahab::before {
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.35) 0%, rgba(180, 100, 50, 0.2) 50%, rgba(0, 0, 0, 0.5) 100%);
+}
+
+/* What's Included: 4 items, 2x2 grid (default is 2 cols) */
+.included-grid--four {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    .included-grid--four {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Pricing: premium trip badge / highlight card */
+.trip-pricing {
+    padding: 4rem 2rem;
+    background: var(--sand-light);
+}
+
+.pricing-card {
+    max-width: 480px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 2.5rem 3rem;
+    background: linear-gradient(135deg, rgba(232, 168, 87, 0.12), rgba(201, 125, 74, 0.08));
+    border: 1px solid rgba(201, 125, 74, 0.2);
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(201, 125, 74, 0.12);
+}
+
+.pricing-label {
+    display: block;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #b86b3a;
+    margin-bottom: 0.5rem;
+}
+
+.pricing-amount {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--ocean-blue-dark);
+    margin-bottom: 0.5rem;
+}
+
+.pricing-amount span {
+    display: block;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-dark);
+    margin-top: 0.25rem;
+}
+
+.pricing-note {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    color: var(--text-dark);
+    margin: 0;
+    opacity: 0.9;
+}
+
+/* CTA: warm accent (optional) */
+.trip-cta--dahab .cta-primary {
+    box-shadow: 0 4px 20px rgba(232, 168, 87, 0.4);
+}
+
+.trip-cta--dahab .cta-primary:hover {
+    box-shadow: 0 6px 30px rgba(232, 168, 87, 0.5);
+}
+
+/* Storytelling: adventurous desert + sea tone */
+.trip-story--dahab {
+    background:
+        radial-gradient(ellipse 70% 55% at 90% 15%, rgba(201, 125, 74, 0.1) 0%, transparent 55%),
+        radial-gradient(ellipse 60% 50% at 5% 85%, rgba(0, 136, 184, 0.07) 0%, transparent 50%),
+        linear-gradient(180deg, #faf8f5 0%, #f3f6f9 100%);
+}
+
+.trip-story--dahab .trip-story-callout {
+    background: linear-gradient(135deg, rgba(201, 125, 74, 0.1) 0%, rgba(0, 105, 148, 0.05) 100%);
+    border-left-color: #c97d4a;
+    box-shadow: 0 6px 24px rgba(201, 125, 74, 0.1);
+}
+
+.trip-story--dahab .trip-story-callout-label {
+    color: #b86b3a;
+}
+
+.trip-story--dahab .trip-story-media img {
+    box-shadow:
+        0 10px 36px rgba(201, 125, 74, 0.15),
+        0 4px 12px rgba(0, 77, 107, 0.08);
+}
+
+@media (max-width: 768px) {
+    .trip-pricing {
+        padding: 3rem 1rem;
+    }
+
+    .pricing-card {
+        padding: 2rem 1.5rem;
+    }
+
+    .pricing-amount {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .pricing-amount {
+        font-size: 1.75rem;
+    }
+}
