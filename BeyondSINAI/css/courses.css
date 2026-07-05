@@ -1,0 +1,1369 @@
+﻿/* ============================================
+   PADI COURSES PAGE
+   ============================================ */
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.courses-hero {
+    position: relative;
+    width: 100%;
+    min-height: 72vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 70px;
+    background-image: url("../assets/images/padi-course.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.courses-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.48) 0%, rgba(0, 0, 0, 0.68) 100%);
+}
+
+.courses-hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: var(--white);
+    max-width: 920px;
+    padding: 2rem;
+}
+
+.courses-hero-content h1 {
+    font-family: "Playfair Display", serif;
+    font-size: clamp(2.3rem, 5vw, 4rem);
+    font-weight: 800;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+    text-shadow: 2px 3px 18px rgba(0, 0, 0, 0.8);
+}
+
+.courses-hero-subtitle {
+    font-family: "Inter", sans-serif;
+    font-size: clamp(1rem, 2vw, 1.28rem);
+    margin-bottom: 0.85rem;
+}
+
+.courses-hero-text {
+    font-family: "Inter", sans-serif;
+    font-size: 1rem;
+    line-height: 1.75;
+    opacity: 0.95;
+    max-width: 780px;
+    margin: 0 auto 1.6rem;
+}
+
+.journey-section {
+    padding: 5rem 0;
+    background: var(--white);
+}
+
+.journey-section h2,
+.courses-section h2,
+.cert-path-section h2,
+.specialties-section h2,
+.courses-cta h2 {
+    font-family: "Poppins", sans-serif;
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    color: var(--ocean-blue-dark);
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.journey-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+}
+
+.journey-step {
+    background: var(--sand-light);
+    border-radius: 14px;
+    padding: 1.3rem 1rem;
+    text-align: center;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+}
+
+.journey-step h3 {
+    font-family: "Poppins", sans-serif;
+    font-size: 1.05rem;
+    color: var(--ocean-blue-dark);
+    margin-bottom: 0.3rem;
+}
+
+.journey-step p {
+    font-family: "Inter", sans-serif;
+    color: #5a6875;
+    font-size: 0.92rem;
+}
+
+.courses-section {
+    padding: 5.5rem 0;
+    background: var(--sand-light);
+}
+
+#course-programs {
+    scroll-margin-top: 6rem;
+}
+
+.courses-tabs {
+    display: flex;
+    gap: 0.65rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 2.5rem;
+}
+
+.course-tab {
+    border: 1px solid rgba(0, 105, 148, 0.15);
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--ocean-blue-dark);
+    border-radius: 999px;
+    padding: 0.55rem 1.15rem;
+    font-family: "Montserrat", sans-serif;
+    font-size: 0.84rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 8px rgba(0, 77, 107, 0.04);
+}
+
+.course-tab:hover {
+    background: var(--white);
+    border-color: rgba(0, 136, 184, 0.28);
+    transform: translateY(-1px);
+}
+
+.course-tab.is-active {
+    background: linear-gradient(135deg, var(--ocean-blue), var(--ocean-blue-light));
+    color: var(--white);
+    border-color: transparent;
+    box-shadow: 0 4px 16px rgba(0, 105, 148, 0.22);
+}
+
+.courses-path .course-showcase {
+    max-width: 720px;
+    margin: 0 auto;
+    background: var(--white);
+    background-image: none;
+    border-radius: 20px;
+    padding: 3rem 3rem 2.75rem;
+    border: 1px solid rgba(0, 105, 148, 0.06);
+    box-shadow: 0 4px 24px rgba(0, 77, 107, 0.06);
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.38s ease, transform 0.38s ease;
+}
+
+.courses-path .course-showcase.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.course-showcase-header {
+    position: static;
+    top: auto;
+    left: auto;
+    width: auto;
+    z-index: auto;
+    margin-bottom: 2.75rem;
+    padding: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+    background: none;
+    background-image: none;
+    background-size: unset;
+    background-position: unset;
+    background-repeat: unset;
+    background-attachment: unset;
+    box-shadow: none;
+    transition: none;
+}
+
+.course-showcase-header::before {
+    display: none;
+    content: none;
+}
+
+.course-showcase-header .course-title {
+    font-family: "Poppins", sans-serif;
+    font-size: clamp(1.85rem, 3vw, 2.35rem);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.12;
+    color: var(--ocean-blue-dark);
+    margin: 0 0 0.85rem;
+}
+
+.course-showcase-tagline {
+    font-family: "Inter", sans-serif;
+    font-size: 1.05rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #5a6878;
+    margin: 0 0 1.5rem;
+    max-width: 42ch;
+}
+
+.course-showcase-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin-bottom: 0;
+}
+
+.course-showcase-badge {
+    display: inline-block;
+    font-family: "Inter", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: #4a5866;
+    background: transparent;
+    border: 1px solid rgba(0, 105, 148, 0.14);
+    border-radius: 999px;
+    padding: 0.4rem 0.9rem;
+    white-space: nowrap;
+}
+
+.course-showcase-badge--level,
+.course-showcase-badge--price {
+    color: var(--ocean-blue-dark);
+    border-color: rgba(0, 105, 148, 0.18);
+}
+
+.course-showcase-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.course-showcase-block {
+    padding: 2rem 0;
+    border-bottom: 1px solid rgba(0, 105, 148, 0.07);
+}
+
+.course-showcase-block:first-child {
+    padding-top: 0;
+}
+
+.course-showcase-block--outcome {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.course-showcase-heading {
+    font-family: "Inter", sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #9aa5af;
+    margin: 0 0 1.15rem;
+}
+
+.course-line-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+}
+
+.course-line-list li {
+    font-family: "Inter", sans-serif;
+    font-size: 0.98rem;
+    line-height: 1.5;
+    color: #4a5866;
+    padding-left: 0;
+}
+
+.course-showcase-checklist {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+}
+
+.course-showcase-checklist li {
+    font-family: "Inter", sans-serif;
+    font-size: 0.98rem;
+    line-height: 1.45;
+    color: #3d4b58;
+    padding-left: 1.35rem;
+    position: relative;
+}
+
+.course-showcase-checklist li::before {
+    content: "·";
+    position: absolute;
+    left: 0.15rem;
+    top: 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--ocean-blue-light);
+    line-height: 1.35;
+}
+
+.course-outcome-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.course-outcome-line {
+    font-family: "Poppins", sans-serif;
+    font-size: 1.05rem;
+    font-weight: 500;
+    line-height: 1.45;
+    color: var(--ocean-blue-dark);
+    margin: 0;
+}
+
+.course-showcase-action {
+    margin-top: 3rem;
+    padding-top: 0;
+    background: none;
+    background-image: none;
+}
+
+.course-showcase-cta {
+    display: inline-block;
+    padding: 0.9rem 2rem;
+    font-size: 0.95rem;
+    animation: none;
+}
+
+.course-panel {
+    max-width: 860px;
+    margin: 0 auto;
+    background: var(--white);
+    border-radius: 18px;
+    padding: 1.8rem;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.09);
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.32s ease, transform 0.32s ease;
+}
+
+.course-panel.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.course-panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.6rem;
+}
+
+.course-panel h3 {
+    font-family: "Poppins", sans-serif;
+    color: var(--ocean-blue-dark);
+    font-size: 1.55rem;
+    margin: 0;
+}
+
+.course-highlights {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
+    margin-bottom: 1.25rem;
+}
+
+.course-highlight-item {
+    background: rgba(0, 105, 148, 0.05);
+    border: 1px solid rgba(0, 105, 148, 0.08);
+    border-radius: 12px;
+    padding: 0.65rem 0.85rem;
+    min-width: 0;
+}
+
+.course-highlight-label {
+    display: block;
+    font-family: "Inter", sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #8a97a3;
+    margin-bottom: 0.25rem;
+}
+
+.course-highlight-value {
+    display: block;
+    font-family: "Inter", sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    line-height: 1.45;
+    color: #3d4b58;
+}
+
+.course-panel-body h4 {
+    font-family: "Poppins", sans-serif;
+    font-size: 1rem;
+    color: var(--text-dark);
+    margin-bottom: 0.6rem;
+}
+
+.course-panel-body + .course-panel-body {
+    margin-top: -0.25rem;
+}
+
+.course-panel-body ul {
+    list-style: disc;
+    padding-left: 1.2rem;
+    margin-bottom: 1rem;
+}
+
+.course-panel-body ul:last-child {
+    margin-bottom: 0.85rem;
+}
+
+.course-panel-body li {
+    font-family: "Inter", sans-serif;
+    color: #4b5a67;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 0.35rem;
+}
+
+.course-panel-price {
+    font-family: "Poppins", sans-serif;
+    font-size: 1.38rem;
+    color: var(--ocean-blue-dark);
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+}
+
+.course-panel-highlight {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #5d6d7b;
+    font-style: italic;
+}
+
+.course-level-badge {
+    border-radius: 999px;
+    padding: 0.32rem 0.75rem;
+    font-family: "Inter", sans-serif;
+    font-size: 0.76rem;
+    font-weight: 600;
+    color: var(--ocean-blue-dark);
+    background: rgba(0, 136, 184, 0.14);
+    flex-shrink: 0;
+}
+
+.course-panel-info {
+    font-family: "Inter", sans-serif;
+    font-size: 0.95rem;
+    color: #5f6f7d;
+    line-height: 1.6;
+    margin-bottom: 1.1rem;
+}
+
+/* PADI Certification Path — structured timeline */
+.cert-path-section {
+    padding: 5rem 0;
+    background: var(--white);
+}
+
+.cert-path-section h2 {
+    margin-bottom: 1rem;
+}
+
+.cert-path-lead {
+    max-width: 800px;
+    margin: 0 auto 2.5rem;
+    text-align: center;
+    font-family: "Inter", sans-serif;
+    font-size: 1.03rem;
+    line-height: 1.72;
+    color: #52606d;
+}
+
+.cert-path-timeline {
+    list-style: none;
+    margin: 0 auto;
+    padding: 0;
+    max-width: 880px;
+    position: relative;
+}
+
+.cert-path-timeline::before {
+    content: "";
+    position: absolute;
+    left: calc(1.25rem - 1.5px);
+    top: 0.5rem;
+    bottom: 0.5rem;
+    width: 3px;
+    border-radius: 3px;
+    background: linear-gradient(180deg, var(--ocean-blue-light), rgba(0, 105, 148, 0.22));
+}
+
+.cert-path-timeline > li {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1rem 1.25rem;
+    align-items: start;
+    padding-bottom: 1.75rem;
+}
+
+.cert-path-timeline > li:last-child {
+    padding-bottom: 0;
+}
+
+.cert-path-node {
+    position: relative;
+    z-index: 1;
+    width: 2.5rem;
+    height: 2.5rem;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: linear-gradient(145deg, var(--ocean-blue), var(--ocean-blue-light));
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 14px rgba(0, 105, 148, 0.35);
+}
+
+.cert-path-node--pro {
+    background: linear-gradient(145deg, #1a5080, var(--ocean-blue-light));
+}
+
+.cert-path-num {
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+
+.cert-path-card {
+    background: linear-gradient(180deg, #ffffff 0%, #fcfaf6 100%);
+    border-radius: 14px;
+    padding: 1.25rem 1.35rem;
+    box-shadow: 0 6px 22px rgba(20, 46, 64, 0.08);
+    border: 1px solid rgba(0, 105, 148, 0.08);
+}
+
+.cert-path-card--pro {
+    border-color: rgba(26, 80, 128, 0.15);
+}
+
+.cert-path-phase {
+    margin: 0 0 0.35rem;
+    font-family: "Inter", sans-serif;
+    font-size: 0.74rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ocean-blue-dark);
+}
+
+.cert-path-card h3 {
+    font-family: "Poppins", sans-serif;
+    font-size: 1.18rem;
+    color: var(--ocean-blue-dark);
+    margin: 0 0 0.75rem;
+    font-weight: 600;
+}
+
+.cert-path-meta {
+    display: grid;
+    gap: 0.55rem;
+    margin: 0 0 0.85rem;
+    padding: 0.65rem 0.85rem;
+    background: rgba(0, 105, 148, 0.06);
+    border-radius: 10px;
+}
+
+.cert-path-meta > div {
+    display: grid;
+    grid-template-columns: minmax(5.5rem, auto) 1fr;
+    gap: 0.5rem 0.85rem;
+    align-items: baseline;
+}
+
+.cert-path-meta dt {
+    margin: 0;
+    font-family: "Inter", sans-serif;
+    font-size: 0.76rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #5a6978;
+}
+
+.cert-path-meta dd {
+    margin: 0;
+    font-family: "Inter", sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #3d4b58;
+}
+
+.cert-path-card > p:last-of-type {
+    margin-bottom: 0;
+}
+
+.cert-path-card p {
+    font-family: "Inter", sans-serif;
+    font-size: 0.93rem;
+    line-height: 1.62;
+    color: #52606d;
+    margin: 0 0 0.65rem;
+}
+
+.cert-path-tip {
+    margin-top: 0.75rem !important;
+    margin-bottom: 0 !important;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(0, 105, 148, 0.12);
+    font-size: 0.89rem !important;
+    color: #4a5865 !important;
+}
+
+.cert-path-tip a {
+    color: var(--ocean-blue-light);
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.cert-path-tip a:hover {
+    color: var(--ocean-blue-dark);
+    text-decoration: underline;
+}
+
+.cert-path-node--elite {
+    background: linear-gradient(145deg, var(--button-gold), var(--button-yellow));
+    box-shadow: 0 4px 18px rgba(255, 165, 0, 0.4);
+}
+
+.cert-path-card--elite {
+    border-color: rgba(255, 165, 0, 0.35);
+    box-shadow:
+        0 6px 22px rgba(20, 46, 64, 0.08),
+        0 0 24px rgba(255, 165, 0, 0.12);
+}
+
+.cert-path-card--soon {
+    opacity: 0.85;
+    border-style: dashed;
+}
+
+.cert-path-section--pro {
+    background: var(--sand-light);
+}
+
+.cert-path-block {
+    max-width: 880px;
+    margin: 0 auto 3rem;
+}
+
+.cert-path-block--pro {
+    margin-bottom: 0;
+    padding-top: 2.5rem;
+    border-top: 2px solid rgba(0, 105, 148, 0.12);
+}
+
+.cert-path-block-title {
+    font-family: "Poppins", sans-serif;
+    font-size: 1.35rem;
+    font-weight: 600;
+    text-align: center;
+    margin: 0 0 0.45rem;
+}
+
+.cert-path-block--rec .cert-path-block-title {
+    color: var(--ocean-blue-dark);
+}
+
+.cert-path-block--pro .cert-path-block-title {
+    color: #1a5080;
+}
+
+.cert-path-block-lead {
+    text-align: center;
+    font-family: "Inter", sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #62707d;
+    margin: 0 0 2rem;
+}
+
+.cert-path-achievement {
+    background: linear-gradient(180deg, rgba(255, 250, 240, 0.95) 0%, rgba(255, 255, 255, 0.98) 100%);
+    border-radius: 14px;
+    padding: 1.5rem 1.35rem;
+    border: 1px solid rgba(255, 165, 0, 0.35);
+    box-shadow:
+        0 6px 22px rgba(20, 46, 64, 0.08),
+        0 0 28px rgba(255, 165, 0, 0.14);
+    text-align: center;
+}
+
+.cert-path-achievement .msd-badge {
+    margin-bottom: 0.85rem;
+}
+
+.cert-path-achievement h3 {
+    font-family: "Poppins", sans-serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--ocean-blue-dark);
+    margin: 0 0 0.35rem;
+}
+
+.cert-path-achievement-desc {
+    font-family: "Inter", sans-serif;
+    font-size: 0.93rem;
+    line-height: 1.62;
+    color: #52606d;
+    margin: 0 0 1.25rem;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.cert-path-achievement .msd-requirements-chain {
+    margin-bottom: 1.25rem;
+}
+
+.cert-path-achievement-highlights {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem 1rem;
+}
+
+.cert-path-achievement-highlights li {
+    font-family: "Inter", sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #5a6978;
+    background: rgba(255, 165, 0, 0.08);
+    border-radius: 999px;
+    padding: 0.35rem 0.85rem;
+}
+
+.cert-path-card--pro .course-panel-head {
+    margin-bottom: 0.75rem;
+}
+
+.cert-path-card--pro .course-panel-head h3 {
+    font-family: "Poppins", sans-serif;
+    font-size: 1.18rem;
+    color: var(--ocean-blue-dark);
+    margin: 0;
+    font-weight: 600;
+}
+
+.cert-path-card--pro .course-level-badge {
+    background: rgba(26, 80, 128, 0.14);
+    color: #1a5080;
+}
+
+.cert-path-card--pro .course-panel-body {
+    margin-top: 0.15rem;
+    margin-bottom: 0;
+}
+
+.cert-path-card--pro .course-panel-body ul {
+    margin-bottom: 0;
+}
+
+.cert-path-card--pro .course-panel-highlight {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(0, 105, 148, 0.12);
+    font-style: normal;
+    font-weight: 600;
+    color: #1a5080;
+    font-size: 0.95rem;
+}
+
+.msd-subtitle {
+    font-family: "Inter", sans-serif;
+    font-size: 0.95rem;
+    color: #62707d;
+    margin: 0 0 0.75rem;
+}
+
+.msd-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, rgba(255, 165, 0, 0.18), rgba(255, 140, 0, 0.12));
+    color: #8a5a00;
+    border: 1px solid rgba(255, 165, 0, 0.3);
+}
+
+.msd-requirements-chain {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+}
+
+.msd-requirements-chain li {
+    position: relative;
+    font-family: "Inter", sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #3d4b58;
+    background: rgba(0, 105, 148, 0.06);
+    border: 1px solid rgba(0, 105, 148, 0.1);
+    border-radius: 12px;
+    padding: 0.75rem 1.5rem;
+    min-width: min(100%, 320px);
+    text-align: center;
+}
+
+.msd-requirements-chain li:not(:last-child)::after {
+    content: "↓";
+    display: block;
+    font-size: 1.1rem;
+    color: var(--ocean-blue-light);
+    margin-top: 0.65rem;
+    font-weight: 700;
+}
+
+.msd-requirements-chain li + li {
+    margin-top: 0.65rem;
+}
+
+.msd-requirements-final {
+    font-family: "Poppins", sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 1.05rem !important;
+    color: var(--ocean-blue-dark) !important;
+    background: linear-gradient(135deg, rgba(255, 165, 0, 0.15), rgba(255, 140, 0, 0.08)) !important;
+    border-color: rgba(255, 165, 0, 0.35) !important;
+    box-shadow: 0 4px 18px rgba(255, 165, 0, 0.15);
+}
+
+.journey-grid--paths {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 880px;
+    margin: 0 auto;
+}
+
+.course-path-label {
+    font-family: "Poppins", sans-serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--ocean-blue-dark);
+    text-align: center;
+    margin: 0 0 1.25rem;
+}
+
+.courses-path {
+    margin-bottom: 3rem;
+}
+
+.courses-path:last-child {
+    margin-bottom: 0;
+}
+
+.courses-path--pro .course-path-label {
+    color: #1a5080;
+}
+
+.courses-path--pro .course-level-badge {
+    background: rgba(26, 80, 128, 0.14);
+    color: #1a5080;
+}
+
+/* PADI Specialty Courses — premium showcase catalogue */
+.specialties-section {
+    padding: 5.5rem 0;
+    background:
+        radial-gradient(ellipse 80% 60% at 20% 0%, rgba(0, 136, 184, 0.07) 0%, transparent 55%),
+        radial-gradient(ellipse 70% 50% at 90% 100%, rgba(0, 105, 148, 0.05) 0%, transparent 50%),
+        linear-gradient(180deg, #faf8f3 0%, #f3f6f9 50%, #faf8f3 100%);
+}
+
+.specialties-header {
+    margin-bottom: 3rem;
+}
+
+.specialties-lead {
+    margin: 0 auto;
+    font-family: "Inter", sans-serif;
+    font-size: 0.95rem;
+    line-height: 1.65;
+    color: #62707d;
+    text-align: center;
+    max-width: 640px;
+}
+
+.specialties-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+}
+
+.specialty-showcase {
+    display: flex;
+    align-items: stretch;
+    gap: 2.5rem;
+    padding: 2rem;
+    background: var(--white);
+    border-radius: 24px;
+    border: 1px solid rgba(0, 105, 148, 0.08);
+    box-shadow:
+        0 2px 4px rgba(0, 77, 107, 0.04),
+        0 16px 48px rgba(0, 77, 107, 0.08);
+    transition:
+        transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.35s ease;
+}
+
+.specialty-showcase:hover {
+    transform: translateY(-4px);
+    box-shadow:
+        0 4px 8px rgba(0, 77, 107, 0.06),
+        0 24px 56px rgba(0, 105, 148, 0.12);
+}
+
+.specialty-showcase--reverse {
+    flex-direction: row-reverse;
+}
+
+.specialty-showcase-media {
+    flex: 0 0 35%;
+    margin: 0;
+    min-height: 320px;
+    border-radius: 18px;
+    overflow: hidden;
+}
+
+.specialty-showcase-media img {
+    width: 100%;
+    height: 100%;
+    min-height: 320px;
+    object-fit: cover;
+    display: block;
+}
+
+.specialty-showcase-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: 0.25rem 0.5rem 0.25rem 0;
+}
+
+.specialty-showcase--reverse .specialty-showcase-body {
+    padding: 0.25rem 0 0.25rem 0.5rem;
+}
+
+.specialty-showcase-title {
+    font-family: "Poppins", sans-serif;
+    font-size: clamp(1.5rem, 2.5vw, 1.85rem);
+    font-weight: 700;
+    color: var(--ocean-blue-dark);
+    line-height: 1.2;
+    margin: 0 0 0.5rem;
+    letter-spacing: -0.02em;
+}
+
+.specialty-showcase-badge {
+    display: inline-block;
+    font-family: "Inter", sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ocean-blue-light);
+    margin-bottom: 1.25rem;
+}
+
+.specialty-showcase-intro {
+    font-family: "Inter", sans-serif;
+    font-size: 1rem;
+    line-height: 1.72;
+    color: #4a5866;
+    margin: 0 0 1.75rem;
+    max-width: 56ch;
+}
+
+.specialty-showcase-blocks {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.specialty-showcase-block h4 {
+    font-family: "Poppins", sans-serif;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #8a97a3;
+    margin: 0 0 0.45rem;
+}
+
+.specialty-showcase-block > p {
+    font-family: "Inter", sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--ocean-blue-dark);
+    margin: 0;
+}
+
+.specialty-showcase-block ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.specialty-showcase-block ul li {
+    font-family: "Inter", sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #3d4b58;
+    line-height: 1.5;
+    padding-left: 1rem;
+    position: relative;
+    margin-bottom: 0.25rem;
+}
+
+.specialty-showcase-block ul li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--ocean-blue-light);
+}
+
+.specialty-showcase-blocks + .specialty-showcase-block {
+    margin-bottom: 1.5rem;
+}
+
+.specialty-showcase-skills li {
+    font-weight: 400;
+    color: #4b5a67;
+}
+
+.specialty-showcase-prereq {
+    display: inline-block;
+    margin-bottom: 1.75rem;
+    padding: 0.85rem 1.15rem;
+    background: rgba(0, 105, 148, 0.05);
+    border: 1px solid rgba(0, 105, 148, 0.1);
+    border-radius: 12px;
+    max-width: 100%;
+}
+
+.specialty-showcase-prereq-label {
+    display: block;
+    font-family: "Inter", sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #8a97a3;
+    margin-bottom: 0.25rem;
+}
+
+.specialty-showcase-prereq p {
+    font-family: "Inter", sans-serif;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--ocean-blue-dark);
+    margin: 0;
+}
+
+.specialty-showcase-cta {
+    align-self: flex-start;
+    margin-top: auto;
+    padding: 0.85rem 2rem;
+    font-size: 0.95rem;
+    animation: none;
+}
+
+.cert-path-aside {
+    max-width: 880px;
+    margin: 2.5rem auto 0;
+    padding: 1.5rem 1.65rem;
+    border-radius: 14px;
+    background: var(--sand-light);
+    border-left: 4px solid var(--ocean-blue-light);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.05);
+}
+
+.cert-path-aside h3 {
+    font-family: "Poppins", sans-serif;
+    font-size: 1.12rem;
+    color: var(--ocean-blue-dark);
+    margin: 0 0 0.6rem;
+}
+
+.cert-path-aside > p {
+    font-family: "Inter", sans-serif;
+    font-size: 0.93rem;
+    line-height: 1.62;
+    color: #52606d;
+    margin: 0 0 0.65rem;
+}
+
+.cert-path-aside ul {
+    margin: 0 0 0.85rem;
+    padding-left: 1.15rem;
+}
+
+.cert-path-aside li {
+    font-family: "Inter", sans-serif;
+    font-size: 0.92rem;
+    line-height: 1.58;
+    color: #454f5a;
+    margin-bottom: 0.45rem;
+}
+
+.cert-path-aside-foot {
+    margin: 0 !important;
+    font-size: 0.88rem !important;
+    color: #62707d !important;
+    font-style: italic;
+}
+
+.courses-cta {
+    padding: 5rem 0;
+    background-image: url("../assets/images/hero-ocean.jpg");
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.courses-cta::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.58);
+}
+
+.courses-cta .container {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+}
+
+.courses-cta h2,
+.courses-cta p {
+    color: var(--white);
+}
+
+.courses-cta p {
+    font-family: "Inter", sans-serif;
+    font-size: 1.05rem;
+    margin-bottom: 1.75rem;
+}
+
+.cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.cta-primary,
+.cta-secondary {
+    display: inline-block;
+    padding: 1rem 2rem;
+    border-radius: 30px;
+    font-family: "Raleway", sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    transition: all 0.3s ease;
+}
+
+.cta-primary {
+    background: linear-gradient(135deg, var(--button-yellow), var(--button-gold));
+    color: var(--white);
+    box-shadow: 0 4px 18px rgba(255, 165, 0, 0.35);
+}
+
+.cta-primary:hover {
+    transform: translateY(-2px);
+}
+
+.cta-secondary {
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    color: var(--white);
+}
+
+.cta-secondary:hover {
+    background: var(--white);
+    color: var(--ocean-blue-dark);
+}
+
+@media (max-width: 992px) {
+    .journey-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .journey-grid--paths {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .specialty-showcase {
+        gap: 2rem;
+        padding: 1.75rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0 1.2rem;
+    }
+
+    .courses-hero {
+        min-height: 60vh;
+        margin-top: 60px;
+    }
+
+    .journey-section,
+    .courses-section,
+    .cert-path-section,
+    .specialties-section,
+    .courses-cta {
+        padding: 4rem 0;
+    }
+
+    .cert-path-timeline::before {
+        left: calc(1.25rem - 1.5px);
+    }
+
+    .cert-path-meta > div {
+        grid-template-columns: 1fr;
+        gap: 0.15rem;
+    }
+
+    .cert-path-meta dd {
+        padding-left: 0;
+        margin-bottom: 0.35rem;
+    }
+
+    .cert-path-meta div:last-child dd {
+        margin-bottom: 0;
+    }
+
+    .specialties-list {
+        gap: 2rem;
+    }
+
+    .specialty-showcase,
+    .specialty-showcase--reverse {
+        flex-direction: column;
+        padding: 1.35rem;
+        border-radius: 20px;
+    }
+
+    .specialty-showcase-media {
+        flex: none;
+        width: 100%;
+        min-height: 240px;
+    }
+
+    .specialty-showcase-media img {
+        min-height: 240px;
+    }
+
+    .specialty-showcase-body,
+    .specialty-showcase--reverse .specialty-showcase-body {
+        padding: 0;
+    }
+
+    .specialty-showcase-blocks {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .specialty-showcase-intro {
+        font-size: 0.95rem;
+        margin-bottom: 1.35rem;
+    }
+
+    .specialty-showcase-cta {
+        width: 100%;
+        text-align: center;
+    }
+
+    .journey-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .journey-grid--paths {
+        grid-template-columns: 1fr;
+    }
+
+    .courses-tabs {
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding-bottom: 0.5rem;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .course-tab {
+        white-space: nowrap;
+    }
+
+    .courses-path .course-showcase {
+        padding: 2rem 1.5rem 1.75rem;
+        border-radius: 18px;
+    }
+
+    .course-showcase-header {
+        margin-bottom: 2rem;
+    }
+
+    .course-showcase-header .course-title {
+        font-size: 1.5rem;
+    }
+
+    .course-showcase-tagline {
+        font-size: 0.95rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .course-showcase-block {
+        padding: 1.5rem 0;
+    }
+
+    .course-showcase-action {
+        margin-top: 2.25rem;
+    }
+
+    .course-showcase-cta {
+        width: 100%;
+        text-align: center;
+    }
+}

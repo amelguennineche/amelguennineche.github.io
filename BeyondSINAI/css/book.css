@@ -1,0 +1,494 @@
+﻿/* ============================================
+   BOOK NOW PAGE – Beyond SINAI
+   Premium reservation & trust-focused layout
+   ============================================ */
+
+.book-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+/* ============================================
+   HERO INTRO
+   ============================================ */
+
+.book-hero {
+    margin-top: 70px;
+    padding: 4rem 1.5rem 3rem;
+    text-align: center;
+    background: linear-gradient(180deg, #fafaf9 0%, #f5f3ef 100%);
+}
+
+.book-hero-content {
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+.book-hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4.5vw, 2.75rem);
+    font-weight: 700;
+    color: var(--ocean-blue-dark);
+    margin-bottom: 0.75rem;
+    letter-spacing: 0.02em;
+}
+
+.book-hero-subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(1.05rem, 2vw, 1.2rem);
+    color: var(--text-dark);
+    margin-bottom: 1.25rem;
+    font-weight: 500;
+}
+
+.book-hero-reassurance {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    color: #5a5a5a;
+    line-height: 1.6;
+}
+
+/* ============================================
+   MAIN CONTENT
+   ============================================ */
+
+.book-main {
+    padding: 2rem 0 4rem;
+    background: #fafaf9;
+}
+
+/* ============================================
+   TRIP SUMMARY CARD
+   ============================================ */
+
+.trip-summary {
+    margin-bottom: 2.5rem;
+}
+
+.trip-summary[hidden] {
+    display: none;
+}
+
+.trip-summary-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--ocean-blue-dark);
+    margin-bottom: 1rem;
+}
+
+.trip-summary-card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 1.5rem 1.75rem;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(0, 105, 148, 0.08);
+}
+
+.trip-summary-name {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--ocean-blue-dark);
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.trip-summary-details {
+    display: grid;
+    gap: 0.75rem;
+    margin: 0;
+}
+
+.trip-summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+}
+
+.trip-summary-row dt {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    color: #6b6b6b;
+    font-weight: 500;
+    margin: 0;
+}
+
+.trip-summary-row dd {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    color: var(--text-dark);
+    font-weight: 600;
+    margin: 0;
+}
+
+/* ============================================
+   BOOKING LAYOUT – Form + sticky sidebar
+   ============================================ */
+
+.book-form-section {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+}
+
+.book-layout {
+    width: 100%;
+}
+
+.book-form {
+    display: grid;
+    grid-template-columns: 300px minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    gap: 0 2rem;
+    align-items: start;
+}
+
+.book-form-card {
+    grid-column: 2;
+    grid-row: 1;
+    background: var(--white);
+    border-radius: 20px;
+    padding: 2rem 2.25rem;
+    box-shadow: 0 4px 32px rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.book-confidence-sidebar {
+    grid-column: 1;
+    grid-row: 1 / -1;
+    align-self: start;
+    position: sticky;
+    top: 100px;
+}
+
+.book-form-actions {
+    grid-column: 2;
+    grid-row: 2;
+    margin-top: 1.75rem;
+}
+
+.book-form-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--ocean-blue-dark);
+    margin-bottom: 1.75rem;
+}
+
+.book-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem 1.5rem;
+}
+
+.book-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.book-field--full {
+    grid-column: 1 / -1;
+}
+
+.book-field label {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-dark);
+}
+
+.book-field .required {
+    color: #c0392b;
+}
+
+.book-field input,
+.book-field select,
+.book-field textarea {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    color: var(--text-dark);
+    background: #fafaf9;
+    border: 1px solid #e0ddd8;
+    border-radius: 12px;
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%235a5a5a' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+}
+
+.book-field input,
+.book-field textarea {
+    background-image: none;
+}
+
+.book-field select {
+    padding-right: 2.5rem;
+}
+
+.book-field input:focus,
+.book-field select:focus,
+.book-field textarea:focus {
+    border-color: var(--ocean-blue);
+    box-shadow: 0 0 0 3px rgba(0, 105, 148, 0.12);
+    background-color: var(--white);
+}
+
+.book-field input::placeholder,
+.book-field textarea::placeholder {
+    color: #999;
+}
+
+.book-field-error {
+    font-size: 0.8rem;
+    color: #c0392b;
+    min-height: 1.2em;
+}
+
+.book-field textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* ============================================
+   BOOK WITH CONFIDENCE – Sticky sidebar
+   ============================================ */
+
+.book-confidence-panel {
+    background: var(--white);
+    border: 1px solid #e8e6e2;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.book-confidence-details {
+    margin: 0;
+}
+
+.book-confidence-toggle {
+    display: none;
+    list-style: none;
+    cursor: pointer;
+    padding: 1rem 1.25rem;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--ocean-blue-dark);
+    background: var(--white);
+    border-bottom: 1px solid #eee;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.book-confidence-toggle::-webkit-details-marker {
+    display: none;
+}
+
+.book-confidence-toggle-icon {
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid var(--ocean-blue-dark);
+    border-bottom: 2px solid var(--ocean-blue-dark);
+    transform: rotate(45deg);
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+}
+
+.book-confidence-details[open] .book-confidence-toggle-icon {
+    transform: rotate(-135deg);
+}
+
+.book-confidence-body {
+    padding: 1.35rem 1.4rem 1.4rem;
+}
+
+.book-confidence-header {
+    margin-bottom: 1.15rem;
+}
+
+.book-confidence-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--ocean-blue-dark);
+    margin: 0 0 0.45rem;
+    line-height: 1.3;
+}
+
+.book-confidence-subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: #5a5a5a;
+    margin: 0;
+}
+
+.book-confidence-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.book-confidence-card {
+    padding-bottom: 0.85rem;
+    border-bottom: 1px solid #f0eeea;
+}
+
+.book-confidence-card:last-child {
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.book-confidence-card-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--ocean-blue-dark);
+    margin: 0 0 0.35rem;
+    line-height: 1.35;
+}
+
+.book-confidence-card-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: #5a5a5a;
+    margin: 0;
+}
+
+/* ============================================
+   CTA BUTTON
+   ============================================ */
+
+.book-submit {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--white);
+    background: linear-gradient(135deg, var(--ocean-blue), var(--ocean-blue-light));
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+    box-shadow: 0 4px 16px rgba(0, 105, 148, 0.25);
+}
+
+.book-submit:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 24px rgba(0, 105, 148, 0.3);
+}
+
+.book-submit:active {
+    transform: translateY(0);
+}
+
+.book-submit:focus-visible {
+    box-shadow: 0 0 0 3px rgba(0, 105, 148, 0.25);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 900px) {
+    .book-form {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+        gap: 0;
+    }
+
+    .book-form-card {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .book-confidence-sidebar {
+        grid-column: 1;
+        grid-row: 2;
+        position: static;
+        top: auto;
+        margin-top: 1.25rem;
+    }
+
+    .book-form-actions {
+        grid-column: 1;
+        grid-row: 3;
+        margin-top: 1.25rem;
+    }
+
+    .book-confidence-toggle {
+        display: flex;
+    }
+
+    .book-confidence-body {
+        padding: 0 1.25rem 1.25rem;
+    }
+
+    .book-confidence-header {
+        display: none;
+    }
+
+    .book-confidence-details:not([open]) .book-confidence-body {
+        display: none;
+    }
+
+    .book-confidence-panel {
+        border-radius: 14px;
+    }
+}
+
+@media (max-width: 768px) {
+    .book-hero {
+        padding: 3rem 1rem 2.5rem;
+    }
+
+    .book-main {
+        padding: 1.5rem 0 3rem;
+    }
+
+    .book-container {
+        padding: 0 1rem;
+    }
+
+    .book-form-card {
+        padding: 1.5rem 1.25rem;
+    }
+
+    .book-form-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+}
+
+@media (min-width: 901px) {
+    .book-confidence-details {
+        display: block;
+    }
+
+    .book-confidence-details .book-confidence-body {
+        display: block !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .book-hero h1 {
+        font-size: 1.75rem;
+    }
+
+    .trip-summary-card {
+        padding: 1.25rem 1.25rem;
+    }
+}
