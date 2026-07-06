@@ -82,20 +82,37 @@
 <body>
     <a href="#main-content" class="skip-link">Skip to main content</a>
     <!-- Header -->
-    <header>
-        <nav aria-label="Main navigation">
+    <header class="site-header">
+        <nav class="site-nav" aria-label="Main navigation">
             <div class="logo">
                 <a href="index.html"><img src="assets/images/5.png" alt="Beyond SINAI — scuba diving and adventures in Sharm El Sheikh" width="577" height="433"></a>
             </div>
-            <ul class="menu">
+            <ul class="nav-links">
                 <li><a href="#home" aria-current="page">Home</a></li>
                 <li><a href="#packages">Packages</a></li>
                 <li><a href="#courses">Courses</a></li>
                 <li><a href="pages/gallery.html">Gallery</a></li>
             </ul>
-            <a href="pages/book-now.html" class="book-now">Book Your Adventure</a>
+            <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
+                <span class="nav-toggle-bar" aria-hidden="true"></span>
+                <span class="nav-toggle-bar" aria-hidden="true"></span>
+                <span class="nav-toggle-bar" aria-hidden="true"></span>
+            </button>
         </nav>
     </header>
+    <div class="nav-overlay" id="nav-overlay" hidden></div>
+    <aside id="mobile-menu" class="mobile-menu" aria-label="Mobile navigation" aria-hidden="true">
+        <nav class="mobile-menu-nav">
+            <ul class="mobile-menu-list">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#packages">Packages</a></li>
+                <li><a href="#courses">Courses</a></li>
+                <li><a href="pages/gallery.html">Gallery</a></li>
+                <li><a href="pages/padi-courses.html">PADI Courses</a></li>
+            </ul>
+            <a href="pages/book-now.html" class="mobile-menu-cta">Book Now</a>
+        </nav>
+    </aside>
 
     <main id="main-content">
         <!-- Hero Section -->
@@ -179,5 +196,6 @@
             <p>&copy; 2026 Beyond SINAI. All rights reserved.</p>
         </div>
     </footer>
+    <script src="js/nav.js" defer></script>
 </body>
 </html>

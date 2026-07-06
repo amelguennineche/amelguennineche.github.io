@@ -22,7 +22,7 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    margin-top: 70px;
+    margin-top: 0;
 }
 
 .safari-hero::before {

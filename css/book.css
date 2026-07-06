@@ -14,8 +14,8 @@
    ============================================ */
 
 .book-hero {
-    margin-top: 70px;
-    padding: 4rem 1.5rem 3rem;
+    margin-top: 0;
+    padding: calc(4rem + 72px) 1.5rem 3rem;
     text-align: center;
     background: linear-gradient(180deg, #fafaf9 0%, #f5f3ef 100%);
 }
