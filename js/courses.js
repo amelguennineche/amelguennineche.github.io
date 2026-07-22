@@ -28,31 +28,6 @@
                 'Explore reefs and dive sites worldwide.'
             ]
         },
-        'adventure': {
-            title: 'Adventure Diver',
-            tagline: 'Three adventure dives to explore new types of diving.',
-            badges: { level: 'Intermediate', duration: '1–2 days', price: 'Contact us' },
-            overview: [
-                'Sample three different dive experiences.',
-                'Build confidence underwater.',
-                'A flexible step toward Advanced OW.'
-            ],
-            includes: [
-                '3 Adventure Dives of your choice',
-                'PADI eLearning theory',
-                'International certification'
-            ],
-            requirements: [
-                'Open Water Diver (or equivalent)',
-                'Minimum age: 10 (Junior) or 15 (Adult)',
-                'Medically fit for diving',
-                'Format: Open Water + eLearning'
-            ],
-            outcome: [
-                'Discover which dive types excite you most.',
-                'Progress toward Advanced Open Water.'
-            ]
-        },
         'advanced': {
             title: 'Advanced Open Water Diver',
             tagline: 'Five adventure dives to expand your skills and limits.',
@@ -163,7 +138,6 @@
 
     var tripSlugMap = {
         'open-water': 'open-water',
-        'adventure': 'adventure',
         'advanced': 'advanced-open-water',
         'efr': 'efr',
         'rescue': 'rescue',

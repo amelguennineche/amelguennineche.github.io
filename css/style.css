@@ -537,7 +537,8 @@ a.hero-button,
     position: relative;
     z-index: 2;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 340px));
+    justify-content: center;
     gap: 1.5rem;
     max-width: 1400px;
     margin: 0 auto;
@@ -877,7 +878,8 @@ footer {
 /* Tablettes — 2 cartes par ligne */
 @media (max-width: 1024px) {
     .adventures-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 340px));
+        justify-content: center;
         gap: 2rem;
         max-width: 900px;
     }
@@ -951,7 +953,8 @@ footer {
     }
 
     .adventures-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 340px);
+        justify-content: center;
         gap: 1.5rem;
     }
 }

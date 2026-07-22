@@ -1,0 +1,705 @@
+/* ============================================
+   LIVEABOARD PAGE — Safari Liveaboard
+   Premium diving travel layout with real photos
+   ============================================ */
+
+.lb-container {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.lb-section-lead {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.1rem;
+    color: var(--text-dark);
+    text-align: center;
+    max-width: 640px;
+    margin: 0 auto 3.25rem;
+    line-height: 1.65;
+    opacity: 0.92;
+}
+
+/* --------------------------------------------
+   Shared image treatments
+   -------------------------------------------- */
+
+.lb-masonry__item,
+.lb-dive-grid__item,
+.lb-route-media {
+    overflow: hidden;
+    border-radius: 18px;
+}
+
+.lb-masonry__item img,
+.lb-dive-grid__item img,
+.lb-route-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.lb-masonry__item:hover img,
+.lb-dive-grid__item:hover img {
+    transform: scale(1.06);
+}
+
+/* --------------------------------------------
+   1. Hero
+   -------------------------------------------- */
+
+.lb-hero {
+    position: relative;
+    width: 100%;
+    min-height: 92vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.lb-hero-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 40%;
+}
+
+.lb-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        180deg,
+        rgba(0, 20, 35, 0.35) 0%,
+        rgba(0, 30, 50, 0.45) 45%,
+        rgba(0, 25, 40, 0.7) 100%
+    );
+    z-index: 1;
+}
+
+.lb-hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: var(--white);
+    padding: 7rem 2rem 4rem;
+    max-width: 880px;
+}
+
+.lb-hero-content h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.35rem, 5.2vw, 4.1rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: 0.4px;
+    margin-bottom: 1.25rem;
+    text-shadow: 0 4px 28px rgba(0, 0, 0, 0.55);
+    color: var(--white);
+    animation: fadeInUp 1s ease;
+}
+
+.lb-hero-subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(1.05rem, 2vw, 1.35rem);
+    font-weight: 400;
+    line-height: 1.55;
+    max-width: 620px;
+    margin: 0 auto 2.25rem;
+    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.45);
+    animation: fadeInUp 1s ease 0.15s both;
+}
+
+.lb-hero-content .hero-button {
+    animation: fadeInUp 1s ease 0.3s both;
+}
+
+/* --------------------------------------------
+   2. Life Onboard — masonry
+   -------------------------------------------- */
+
+.lb-life {
+    padding: 6rem 0 5.5rem;
+    background: var(--white);
+}
+
+.lb-life h2,
+.lb-layout h2,
+.lb-diving h2,
+.lb-trips h2 {
+    font-family: 'Poppins', sans-serif;
+    font-size: clamp(1.9rem, 3.5vw, 2.6rem);
+    color: var(--ocean-blue-dark);
+    text-align: center;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    margin-bottom: 0.85rem;
+}
+
+.lb-masonry {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-auto-rows: 130px;
+    gap: 1rem;
+}
+
+.lb-masonry__item {
+    margin: 0;
+    position: relative;
+    box-shadow: 0 10px 28px rgba(0, 61, 90, 0.12);
+    background: #0a3a4f;
+}
+
+.lb-masonry__item:nth-child(1) {
+    grid-column: 1 / 6;
+    grid-row: span 3;
+}
+
+.lb-masonry__item:nth-child(2) {
+    grid-column: 6 / 9;
+    grid-row: span 2;
+}
+
+.lb-masonry__item:nth-child(3) {
+    grid-column: 9 / 13;
+    grid-row: span 3;
+}
+
+.lb-masonry__item:nth-child(4) {
+    grid-column: 6 / 9;
+    grid-row: span 2;
+}
+
+.lb-masonry__item:nth-child(5) {
+    grid-column: 1 / 7;
+    grid-row: span 2;
+}
+
+.lb-masonry__item:nth-child(6) {
+    grid-column: 7 / 10;
+    grid-row: span 2;
+}
+
+.lb-masonry__item:nth-child(7) {
+    grid-column: 10 / 13;
+    grid-row: span 2;
+}
+
+.lb-masonry__item:nth-child(8) {
+    grid-column: 1 / 4;
+    grid-row: span 2;
+}
+
+.lb-masonry__item:nth-child(9) {
+    grid-column: 4 / 10;
+    grid-row: span 2;
+}
+
+.lb-masonry__item:nth-child(10) {
+    grid-column: 10 / 13;
+    grid-row: span 2;
+}
+
+.lb-masonry__item:nth-child(11) {
+    grid-column: 1 / 7;
+    grid-row: span 2;
+}
+
+.lb-masonry__item:nth-child(12) {
+    grid-column: 7 / 13;
+    grid-row: span 2;
+}
+
+/* --------------------------------------------
+   3. Boat Layout
+   -------------------------------------------- */
+
+.lb-layout {
+    padding: 5.5rem 0;
+    background: var(--sand-light);
+}
+
+.lb-layout-figure {
+    margin: 0 auto;
+    max-width: 820px;
+    text-align: center;
+}
+
+.lb-layout-zoom {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: none;
+    background: var(--white);
+    border-radius: 20px;
+    overflow: hidden;
+    cursor: zoom-in;
+    box-shadow: 0 14px 40px rgba(0, 61, 90, 0.12);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.lb-layout-zoom:hover,
+.lb-layout-zoom:focus-visible {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 48px rgba(0, 105, 148, 0.18);
+    outline: none;
+}
+
+.lb-layout-zoom img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    background: var(--white);
+}
+
+.lb-layout-caption {
+    margin-top: 1rem;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ocean-blue);
+    opacity: 0.85;
+}
+
+/* --------------------------------------------
+   4. Diving Experience
+   -------------------------------------------- */
+
+.lb-diving {
+    padding: 5.5rem 0;
+    background: var(--white);
+}
+
+.lb-dive-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.15rem;
+}
+
+.lb-dive-grid__item {
+    margin: 0;
+    aspect-ratio: 4 / 3;
+    box-shadow: 0 10px 28px rgba(0, 61, 90, 0.12);
+    background: #0a3a4f;
+    border-radius: 18px;
+    overflow: hidden;
+}
+
+/* --------------------------------------------
+   Trip options
+   -------------------------------------------- */
+
+.lb-trips {
+    padding: 5.5rem 0 6rem;
+    background: var(--sand-light);
+}
+
+.lb-route {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    gap: 0;
+    align-items: stretch;
+    background: var(--white);
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 12px 36px rgba(0, 61, 90, 0.1);
+    margin-bottom: 2.5rem;
+}
+
+.lb-route:last-of-type {
+    margin-bottom: 0;
+}
+
+.lb-route-media {
+    min-height: 420px;
+    border-radius: 0;
+}
+
+.lb-route-media img {
+    min-height: 100%;
+}
+
+.lb-route-body {
+    padding: 2.75rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.lb-route-departure {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ocean-blue);
+    margin-bottom: 0.65rem;
+}
+
+.lb-route-body h3 {
+    font-family: 'Poppins', sans-serif;
+    font-size: clamp(1.5rem, 2.4vw, 1.95rem);
+    color: var(--ocean-blue-dark);
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: 1rem;
+}
+
+.lb-route-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.02rem;
+    color: var(--text-dark);
+    line-height: 1.7;
+    margin-bottom: 1.75rem;
+}
+
+.lb-route-facts {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.75rem;
+    padding: 1.15rem 0;
+    border-top: 1px solid rgba(0, 105, 148, 0.12);
+    border-bottom: 1px solid rgba(0, 105, 148, 0.12);
+}
+
+.lb-route-fact dt {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ocean-blue);
+    margin-bottom: 0.3rem;
+}
+
+.lb-route-fact dd {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.98rem;
+    color: var(--text-dark);
+    font-weight: 500;
+    line-height: 1.35;
+}
+
+.lb-route-included {
+    margin-bottom: 1.5rem;
+}
+
+.lb-route-included h4 {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--ocean-blue-dark);
+    margin-bottom: 0.65rem;
+}
+
+.lb-route-included ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.lb-route-included li {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.98rem;
+    color: var(--text-dark);
+    padding-left: 1.15rem;
+    position: relative;
+    line-height: 1.45;
+}
+
+.lb-route-included li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--ocean-blue-light);
+}
+
+.lb-route-price {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--ocean-blue-dark);
+    margin-bottom: 0.4rem;
+}
+
+.lb-route-note {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    color: var(--text-dark);
+    opacity: 0.75;
+    line-height: 1.45;
+    margin-bottom: 1.35rem;
+}
+
+.lb-route-cta {
+    display: inline-block;
+    align-self: flex-start;
+    margin-top: 0.5rem;
+    padding: 0.9rem 1.85rem;
+    border-radius: 30px;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--white);
+    background: linear-gradient(135deg, var(--ocean-blue), var(--ocean-blue-light));
+    box-shadow: 0 4px 16px rgba(0, 105, 148, 0.28);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+.lb-route-cta:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(135deg, var(--button-yellow), var(--button-gold));
+    box-shadow: 0 6px 22px rgba(255, 165, 0, 0.35);
+}
+
+.lb-route--reverse {
+    grid-template-columns: 1fr 1.05fr;
+}
+
+.lb-route--reverse .lb-route-media {
+    order: 2;
+}
+
+.lb-route--reverse .lb-route-body {
+    order: 1;
+}
+
+/* --------------------------------------------
+   Final CTA
+   -------------------------------------------- */
+
+.lb-cta {
+    padding: 5.5rem 0;
+    background:
+        linear-gradient(180deg, rgba(0, 40, 60, 0.72), rgba(0, 61, 90, 0.82)),
+        linear-gradient(145deg, #003a52, #006994);
+    color: var(--white);
+    text-align: center;
+}
+
+.lb-cta-inner {
+    max-width: 700px;
+}
+
+.lb-cta h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.9rem, 3.8vw, 2.75rem);
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: 1rem;
+    color: var(--white);
+}
+
+.lb-cta p {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.1rem;
+    line-height: 1.65;
+    margin-bottom: 2rem;
+    opacity: 0.95;
+}
+
+/* --------------------------------------------
+   Layout lightbox
+   -------------------------------------------- */
+
+.lb-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.lb-lightbox.is-open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.lb-lightbox-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.92);
+    cursor: pointer;
+}
+
+.lb-lightbox-close {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    z-index: 10;
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 1.75rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.lb-lightbox-close:hover,
+.lb-lightbox-close:focus-visible {
+    background: rgba(255, 255, 255, 0.22);
+    color: var(--white);
+    outline: none;
+}
+
+.lb-lightbox-content {
+    position: relative;
+    z-index: 5;
+    max-width: 92vw;
+    max-height: 90vh;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.lb-lightbox-content img {
+    max-width: 100%;
+    max-height: 88vh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 8px;
+    background: #fff;
+}
+
+/* --------------------------------------------
+   Responsive
+   -------------------------------------------- */
+
+@media (max-width: 1024px) {
+    .lb-route,
+    .lb-route--reverse {
+        grid-template-columns: 1fr;
+    }
+
+    .lb-route--reverse .lb-route-media,
+    .lb-route--reverse .lb-route-body {
+        order: initial;
+    }
+
+    .lb-route-media {
+        min-height: 280px;
+    }
+
+    .lb-route-body {
+        padding: 2.25rem 2rem;
+    }
+
+    .lb-dive-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .lb-hero {
+        min-height: 85vh;
+    }
+
+    .lb-hero-content {
+        padding: 6rem 1.5rem 3.5rem;
+    }
+
+    .lb-life,
+    .lb-layout,
+    .lb-diving,
+    .lb-trips,
+    .lb-cta {
+        padding: 4rem 0;
+    }
+
+    .lb-container {
+        padding: 0 1.25rem;
+    }
+
+    /* Life Onboard — equal 2-col grid on tablet */
+    .lb-masonry {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-auto-rows: auto;
+        gap: 0.875rem;
+    }
+
+    .lb-masonry__item,
+    .lb-masonry__item:nth-child(n) {
+        grid-column: auto;
+        grid-row: auto;
+        margin: 0;
+        padding: 0;
+        min-height: 0;
+        width: 100%;
+        aspect-ratio: 4 / 3;
+    }
+
+    .lb-masonry__item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .lb-route-facts {
+        grid-template-columns: 1fr;
+        gap: 0.85rem;
+    }
+
+    .lb-dive-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .lb-dive-grid__item {
+        aspect-ratio: 16 / 10;
+    }
+}
+
+/* Phones: iPhone SE / 14 / 15 / Android (~360–430px) */
+@media (max-width: 540px) {
+    .lb-masonry {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .lb-masonry__item,
+    .lb-masonry__item:nth-child(n) {
+        grid-column: 1 / -1;
+        aspect-ratio: 4 / 3;
+    }
+}
+
+@media (max-width: 480px) {
+    .lb-route-body {
+        padding: 1.75rem 1.35rem;
+    }
+
+    .lb-route-cta {
+        width: 100%;
+        text-align: center;
+    }
+
+    .lb-lightbox-close {
+        top: 0.75rem;
+        right: 0.75rem;
+    }
+}
