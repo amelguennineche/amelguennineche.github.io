@@ -90,7 +90,7 @@
             name: 'Open Water Diver',
             location: 'Red Sea',
             duration: '3–4 days',
-            price: '€300–400',
+            price: '450 €',
             type: 'PADI Course'
         },
         'adventure': {
@@ -104,28 +104,28 @@
             name: 'Advanced Open Water Diver',
             location: 'Red Sea',
             duration: '2 days',
-            price: '€250–350',
+            price: '250–350 €',
             type: 'PADI Course'
         },
         'efr': {
             name: 'Emergency First Response (EFR)',
             location: 'Red Sea',
             duration: '1 day',
-            price: '€450',
+            price: '450 €',
             type: 'PADI Course'
         },
         'rescue': {
             name: 'Rescue Diver',
             location: 'Red Sea',
             duration: '3 days',
-            price: '€300–400',
+            price: '300–400 €',
             type: 'PADI Course'
         },
         'divemaster': {
             name: 'Divemaster',
             location: 'Red Sea',
             duration: '2–4 weeks',
-            price: '€700–1200',
+            price: '700–1200 €',
             type: 'PADI Course'
         },
         'master-scuba-diver': {

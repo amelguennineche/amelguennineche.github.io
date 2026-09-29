@@ -5,7 +5,7 @@
         'open-water': {
             title: 'Open Water Diver',
             tagline: 'Your first PADI certification. The starting point for every diver.',
-            badges: { level: 'Beginner', duration: '3–4 days', price: '€300–400' },
+            badges: { level: 'Beginner', duration: '3–4 days', price: '450 €' },
             overview: [
                 'Learn essential scuba skills step by step.',
                 'Dive with a buddy up to 18 metres.',
@@ -31,7 +31,7 @@
         'advanced': {
             title: 'Advanced Open Water Diver',
             tagline: 'Five adventure dives to expand your skills and limits.',
-            badges: { level: 'Intermediate', duration: '2 days', price: '€250–350' },
+            badges: { level: 'Intermediate', duration: '2 days', price: '250–350 €' },
             overview: [
                 'Complete deep and navigation dives.',
                 'Choose three additional adventure dives.',
@@ -57,7 +57,7 @@
         'efr': {
             title: 'Emergency First Response (EFR)',
             tagline: 'CPR and first aid — required before Rescue Diver.',
-            badges: { level: 'All levels', duration: '1 day', price: '€450' },
+            badges: { level: 'All levels', duration: '1 day', price: '450 €' },
             overview: [
                 'Learn Primary and Secondary Care.',
                 'Respond to emergencies on land and at sea.',
@@ -83,7 +83,7 @@
         'rescue': {
             title: 'Rescue Diver',
             tagline: 'Prevent problems and assist divers in emergencies.',
-            badges: { level: 'Advanced', duration: '3 days', price: '€300–400' },
+            badges: { level: 'Advanced', duration: '3 days', price: '300–400 €' },
             overview: [
                 'Recognise stress before it becomes an emergency.',
                 'Practise rescue scenarios in and out of the water.',
@@ -109,7 +109,7 @@
         'divemaster': {
             title: 'Divemaster',
             tagline: 'Your first professional PADI rating.',
-            badges: { level: 'Professional', duration: '2–4 weeks', price: '€700–1200' },
+            badges: { level: 'Professional', duration: '2–4 weeks', price: '700–1200 €' },
             overview: [
                 'Train as a dive leader in the Red Sea.',
                 'Guide certified divers and assist instructors.',
