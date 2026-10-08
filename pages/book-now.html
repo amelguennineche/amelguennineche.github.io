@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -156,6 +156,43 @@
                                     <span class="book-field-error" id="error-phone" role="alert"></span>
                                 </div>
                                 <div class="book-field">
+                                    <label for="country">Country <span class="required" aria-hidden="true">*</span></label>
+                                    <select id="country" name="country" required autocomplete="country-name" aria-required="true">
+                                        <option value="">Choose your country</option>
+                                        <option value="Algeria">Algeria</option>
+                                        <option value="Australia">Australia</option>
+                                        <option value="Austria">Austria</option>
+                                        <option value="Belgium">Belgium</option>
+                                        <option value="Brazil">Brazil</option>
+                                        <option value="Canada">Canada</option>
+                                        <option value="China">China</option>
+                                        <option value="Czech Republic">Czech Republic</option>
+                                        <option value="Denmark">Denmark</option>
+                                        <option value="Egypt">Egypt</option>
+                                        <option value="Finland">Finland</option>
+                                        <option value="France">France</option>
+                                        <option value="Germany">Germany</option>
+                                        <option value="Greece">Greece</option>
+                                        <option value="India">India</option>
+                                        <option value="Ireland">Ireland</option>
+                                        <option value="Italy">Italy</option>
+                                        <option value="Japan">Japan</option>
+                                        <option value="Netherlands">Netherlands</option>
+                                        <option value="Norway">Norway</option>
+                                        <option value="Poland">Poland</option>
+                                        <option value="Portugal">Portugal</option>
+                                        <option value="Saudi Arabia">Saudi Arabia</option>
+                                        <option value="Spain">Spain</option>
+                                        <option value="Sweden">Sweden</option>
+                                        <option value="Switzerland">Switzerland</option>
+                                        <option value="United Arab Emirates">United Arab Emirates</option>
+                                        <option value="United Kingdom">United Kingdom</option>
+                                        <option value="United States">United States</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                    <span class="book-field-error" id="error-country" role="alert"></span>
+                                </div>
+                                <div class="book-field" id="participants-field">
                                     <label for="participants">Number of Participants <span class="required" aria-hidden="true">*</span></label>
                                     <input type="number" id="participants" name="participants" required min="1" max="20" value="1" aria-required="true">
                                     <span class="book-field-error" id="error-participants" role="alert"></span>
@@ -183,6 +220,11 @@
                                             <option value="mount-sinai-st-catherine">Mount Sinai &amp; St. Catherine</option>
                                         </optgroup>
 
+                                        <optgroup label="Liveaboard">
+                                            <option value="classic-north">Classic North Red Sea Safari</option>
+                                            <option value="south-shark">South Red Sea Shark &amp; Adventure Safari</option>
+                                        </optgroup>
+
                                         <optgroup label="Activities">
                                             <option value="snorkeling-fun">Snorkeling &amp; Fun</option>
                                         </optgroup>
@@ -208,6 +250,38 @@
                                     </select>
                                     <span class="book-field-error" id="error-trip" role="alert"></span>
                                 </div>
+                                <section class="book-form-subsection" id="diving-information" hidden>
+                                    <h3 class="book-subsection-title">Diving Information</h3>
+                                    <div class="book-field">
+                                        <label for="certificationLevel">Current Certification Level</label>
+                                        <select id="certificationLevel" name="certificationLevel" disabled>
+                                            <option value="">Choose your certification</option>
+                                            <option value="No certification">No certification</option>
+                                            <option value="Open Water Diver">Open Water Diver</option>
+                                            <option value="Advanced Open Water Diver">Advanced Open Water Diver</option>
+                                            <option value="Rescue Diver">Rescue Diver</option>
+                                            <option value="Divemaster">Divemaster</option>
+                                            <option value="Other / Equivalent">Other / Equivalent</option>
+                                        </select>
+                                    </div>
+                                    <div class="book-field">
+                                        <label for="loggedDives">Number of Logged Dives</label>
+                                        <input type="number" id="loggedDives" name="loggedDives" min="0" disabled aria-describedby="loggedDives-hint">
+                                        <p class="book-field-hint" id="loggedDives-hint">Approximate number of dives you have logged.</p>
+                                    </div>
+                                </section>
+                                <section class="book-form-subsection" id="liveaboard-information" hidden>
+                                    <h3 class="book-subsection-title">Liveaboard Information</h3>
+                                    <div class="book-field book-field--full">
+                                        <p class="book-readonly-label" id="liveaboard-route-label">Selected Safari</p>
+                                        <p class="book-readonly-value" id="liveaboard-route-name"></p>
+                                    </div>
+                                    <div class="book-field">
+                                        <label for="divers">Number of Divers <span class="required" aria-hidden="true">*</span></label>
+                                        <input type="number" id="divers" name="divers" min="1" value="1" disabled>
+                                        <span class="book-field-error" id="error-divers" role="alert"></span>
+                                    </div>
+                                </section>
                                 <div class="book-field book-field--full">
                                     <label for="date">Preferred Date of Trip <span class="required" aria-hidden="true">*</span></label>
                                     <input type="date" id="date" name="date" required aria-required="true">

@@ -259,6 +259,55 @@
     min-height: 100px;
 }
 
+.book-form-subsection {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem 1.5rem;
+}
+
+.book-form-subsection[hidden],
+.book-field[hidden] {
+    display: none !important;
+}
+
+.book-subsection-title {
+    grid-column: 1 / -1;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--ocean-blue-dark);
+    margin: 0.35rem 0 0;
+}
+
+.book-field-hint {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    color: #6b6b6b;
+    margin: 0;
+    line-height: 1.4;
+}
+
+.book-readonly-label {
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-dark);
+    margin: 0;
+}
+
+.book-readonly-value {
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin: 0;
+    padding: 0.85rem 1rem;
+    background: #fafaf9;
+    border: 1px solid #e0ddd8;
+    border-radius: 12px;
+}
+
 /* ============================================
    BOOK WITH CONFIDENCE – Sticky sidebar
    ============================================ */
@@ -468,6 +517,11 @@
     }
 
     .book-form-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .book-form-subsection {
         grid-template-columns: 1fr;
         gap: 1rem;
     }

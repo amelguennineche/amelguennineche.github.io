@@ -5,14 +5,24 @@
     var tripSelect = document.getElementById('trip');
     var tripSummary = document.getElementById('trip-summary');
     var formStatus = document.getElementById('form-status');
+    var participantsField = document.getElementById('participants-field');
+    var participantsInput = document.getElementById('participants');
+    var divingFields = document.getElementById('diving-information');
+    var liveaboardFields = document.getElementById('liveaboard-information');
+    var certificationInput = document.getElementById('certificationLevel');
+    var loggedDivesInput = document.getElementById('loggedDives');
+    var diversInput = document.getElementById('divers');
+    var liveaboardRouteName = document.getElementById('liveaboard-route-name');
 
     var fieldMap = [
         { input: 'fullname', error: 'error-fullname' },
         { input: 'email', error: 'error-email' },
         { input: 'phone', error: 'error-phone' },
+        { input: 'country', error: 'error-country' },
         { input: 'participants', error: 'error-participants' },
         { input: 'trip', error: 'error-trip' },
-        { input: 'date', error: 'error-date' }
+        { input: 'date', error: 'error-date' },
+        { input: 'divers', error: 'error-divers' }
     ];
 
     var tripData = {
@@ -176,8 +186,87 @@
             duration: '1 day',
             price: 'Contact us',
             type: 'PADI Specialty'
+        },
+        'classic-north': {
+            name: 'Classic North Red Sea Safari',
+            location: 'Sharm El Sheikh',
+            duration: '1 week',
+            price: 'Starting from €1300 per person',
+            type: 'Liveaboard'
+        },
+        'south-shark': {
+            name: 'South Red Sea Shark & Adventure Safari',
+            location: 'Hurghada',
+            duration: '1 week',
+            price: 'Starting from €1400 per person',
+            type: 'Liveaboard'
         }
     };
+
+    function getExperienceType(data) {
+        if (!data) return '';
+        if (data.experienceType) return data.experienceType;
+        var typeMap = {
+            'Daily Trip': 'daily-trip',
+            'Professional Dive': 'professional-dive',
+            'Camping': 'camping',
+            'Safari': 'safari',
+            'Activity': 'activity',
+            'PADI Course': 'padi-course',
+            'PADI Specialty': 'padi-specialty',
+            'Liveaboard': 'liveaboard'
+        };
+        return typeMap[data.type] || '';
+    }
+
+    function setFieldEnabled(field, enabled, required) {
+        if (!field) return;
+        field.disabled = !enabled;
+        if (required) {
+            field.setAttribute('required', '');
+            field.setAttribute('aria-required', 'true');
+        } else {
+            field.removeAttribute('required');
+            field.removeAttribute('aria-required');
+        }
+        if (!enabled) {
+            field.removeAttribute('aria-invalid');
+        }
+    }
+
+    function updateConditionalFields() {
+        var slug = tripSelect ? tripSelect.value : '';
+        var trip = slug && tripData[slug] ? tripData[slug] : null;
+        var type = getExperienceType(trip);
+        var isDiving = type === 'padi-course' || type === 'padi-specialty';
+        var isLiveaboard = type === 'liveaboard';
+
+        if (divingFields) divingFields.hidden = true;
+        if (liveaboardFields) liveaboardFields.hidden = true;
+        setFieldEnabled(certificationInput, false, false);
+        setFieldEnabled(loggedDivesInput, false, false);
+        setFieldEnabled(diversInput, false, false);
+
+        if (isLiveaboard) {
+            if (liveaboardFields) liveaboardFields.hidden = false;
+            if (liveaboardRouteName) liveaboardRouteName.textContent = trip.name;
+            setFieldEnabled(diversInput, true, true);
+            if (participantsField) participantsField.hidden = true;
+            setFieldEnabled(participantsInput, false, false);
+            setFieldState('participants', 'error-participants', '');
+            setFieldState('divers', 'error-divers', '');
+            return;
+        }
+
+        if (participantsField) participantsField.hidden = false;
+        setFieldEnabled(participantsInput, true, true);
+
+        if (isDiving) {
+            if (divingFields) divingFields.hidden = false;
+            setFieldEnabled(certificationInput, true, false);
+            setFieldEnabled(loggedDivesInput, true, false);
+        }
+    }
 
     function getQueryParam(name) {
         var params = new URLSearchParams(window.location.search);
@@ -194,11 +283,18 @@
         document.getElementById('trip-summary-type').textContent = data.type;
         tripSummary.hidden = false;
         if (tripSelect) tripSelect.value = tripId;
+        updateConditionalFields();
     }
 
     function initTripFromUrl() {
         var tripId = getQueryParam('trip');
-        if (tripId && tripData[tripId]) showTripSummary(tripId);
+        if (tripId && tripData[tripId]) {
+            showTripSummary(tripId);
+            return;
+        }
+        if (tripSelect) tripSelect.value = '';
+        if (tripSummary) tripSummary.hidden = true;
+        updateConditionalFields();
     }
 
     function showError(id, message) {
@@ -231,8 +327,10 @@
         var fullname = document.getElementById('fullname');
         var email = document.getElementById('email');
         var phone = document.getElementById('phone');
-        var participants = document.getElementById('participants');
+        var country = document.getElementById('country');
         var date = document.getElementById('date');
+        var selectedTrip = tripSelect && tripData[tripSelect.value] ? tripData[tripSelect.value] : null;
+        var isLiveaboard = getExperienceType(selectedTrip) === 'liveaboard';
         var valid = true;
         var firstInvalid = null;
 
@@ -258,15 +356,34 @@
             firstInvalid = firstInvalid || phone;
             valid = false;
         }
-        if (!participants || !participants.value || parseInt(participants.value, 10) < 1) {
-            setFieldState('participants', 'error-participants', 'Please enter at least 1 participant.');
-            firstInvalid = firstInvalid || participants;
+        if (!country || !country.value) {
+            setFieldState('country', 'error-country', 'Please select your country.');
+            firstInvalid = firstInvalid || country;
             valid = false;
         }
-        if (!tripSelect || !tripSelect.value) {
+        if (!tripSelect || !tripSelect.value || !tripData[tripSelect.value]) {
             setFieldState('trip', 'error-trip', 'Please select an experience.');
             firstInvalid = firstInvalid || tripSelect;
             valid = false;
+        }
+        if (isLiveaboard) {
+            var diversCount = diversInput ? parseInt(diversInput.value, 10) : NaN;
+            if (!diversInput || diversInput.disabled || !diversInput.value || isNaN(diversCount) || diversCount < 1) {
+                setFieldState('divers', 'error-divers', 'Please enter at least 1 diver.');
+                firstInvalid = firstInvalid || diversInput;
+                valid = false;
+            }
+        } else {
+            var participantsCount = participantsInput ? parseInt(participantsInput.value, 10) : NaN;
+            if (!participantsInput || participantsInput.disabled || !participantsInput.value || isNaN(participantsCount) || participantsCount < 1) {
+                setFieldState('participants', 'error-participants', 'Please enter at least 1 participant.');
+                firstInvalid = firstInvalid || participantsInput;
+                valid = false;
+            } else if (participantsCount > 20) {
+                setFieldState('participants', 'error-participants', 'Please enter no more than 20 participants.');
+                firstInvalid = firstInvalid || participantsInput;
+                valid = false;
+            }
         }
         if (!date || !date.value) {
             setFieldState('date', 'error-date', 'Please select your preferred date.');
@@ -289,6 +406,11 @@
         if (!field) return;
         field.setAttribute('aria-describedby', item.error);
         field.addEventListener('input', function () {
+            if (field.getAttribute('aria-invalid') === 'true') {
+                setFieldState(item.input, item.error, '');
+            }
+        });
+        field.addEventListener('change', function () {
             if (field.getAttribute('aria-invalid') === 'true') {
                 setFieldState(item.input, item.error, '');
             }
@@ -324,8 +446,9 @@
         tripSelect.addEventListener('change', function () {
             if (tripSelect.value && tripData[tripSelect.value]) {
                 showTripSummary(tripSelect.value);
-            } else if (tripSummary) {
-                tripSummary.hidden = true;
+            } else {
+                if (tripSummary) tripSummary.hidden = true;
+                updateConditionalFields();
             }
         });
     }
