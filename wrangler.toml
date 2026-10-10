@@ -1,0 +1,18 @@
+name = "diving-preview"
+main = "src/worker.js"
+# compatibility_date is not set on any file in this repo.
+# Value below is the session date (2026-10-10) per Wrangler docs; the live Worker date is unknown.
+compatibility_date = "2026-10-10"
+
+[assets]
+directory = "."
+binding = "ASSETS"
+run_worker_first = ["/api/*"]
+
+# D1: local-only placeholder. Do not use wrangler d1 create / deploy until a real ID exists.
+# database_id is FICTITIOUS and for `wrangler dev` / `d1 … --local` only.
+[[d1_databases]]
+binding = "DB"
+database_name = "beyond-sinai-bookings"
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "migrations"

@@ -1,0 +1,11 @@
+src/
+migrations/
+node_modules/
+.wrangler/
+.git/
+wrangler.toml
+package.json
+package-lock.json
+.assetsignore
+Untitled
+*.md

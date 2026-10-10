@@ -323,6 +323,63 @@
         if (formStatus) formStatus.textContent = message;
     }
 
+    var isSubmitting = false;
+    var defaultSubmitLabel = 'Confirm Booking Request';
+
+    function fieldValue(id) {
+        var el = document.getElementById(id);
+        return el && typeof el.value === 'string' ? el.value.trim() : '';
+    }
+
+    function parseCount(value) {
+        var n = parseInt(value, 10);
+        return isNaN(n) ? NaN : n;
+    }
+
+    function buildBookingPayload() {
+        var trip = fieldValue('trip');
+        var selectedTrip = trip && tripData[trip] ? tripData[trip] : null;
+        var experienceType = getExperienceType(selectedTrip);
+        var payload = {
+            fullname: fieldValue('fullname'),
+            email: fieldValue('email'),
+            phone: fieldValue('phone'),
+            country: fieldValue('country'),
+            trip: trip,
+            date: fieldValue('date')
+        };
+        var message = fieldValue('message');
+        if (message) {
+            payload.message = message;
+        }
+
+        if (experienceType === 'liveaboard') {
+            payload.divers = parseCount(fieldValue('divers'));
+        } else {
+            payload.participants = parseCount(fieldValue('participants'));
+        }
+
+        if (experienceType === 'padi-course' || experienceType === 'padi-specialty') {
+            var certificationLevel = fieldValue('certificationLevel');
+            if (certificationLevel) {
+                payload.certificationLevel = certificationLevel;
+            }
+            var loggedDivesRaw = fieldValue('loggedDives');
+            if (loggedDivesRaw !== '') {
+                payload.loggedDives = parseCount(loggedDivesRaw);
+            }
+        }
+
+        return payload;
+    }
+
+    function serverErrorMessage(data, fallback) {
+        if (data && typeof data.error === 'string' && data.error.trim()) {
+            return data.error.trim();
+        }
+        return fallback;
+    }
+
     function validateForm() {
         var fullname = document.getElementById('fullname');
         var email = document.getElementById('email');
@@ -426,13 +483,61 @@
     if (form) {
         form.addEventListener('submit', function (e) {
             e.preventDefault();
+            if (isSubmitting) return;
             if (!validateForm()) return;
+
             var submitBtn = form.querySelector('.book-submit');
+            var originalLabel = submitBtn && submitBtn.textContent
+                ? submitBtn.textContent
+                : defaultSubmitLabel;
+            var payload = buildBookingPayload();
+
+            isSubmitting = true;
             if (submitBtn) {
-                submitBtn.textContent = 'Request sent — we\'ll confirm soon!';
                 submitBtn.disabled = true;
-                announceStatus('Your booking request was sent. We will confirm your reservation as soon as possible.');
+                submitBtn.textContent = 'Sending request…';
             }
+            announceStatus('Sending your booking request…');
+
+            fetch('/api/bookings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            })
+                .then(function (response) {
+                    return response.json().then(function (data) {
+                        return { response: response, data: data };
+                    }).catch(function () {
+                        return { response: response, data: null };
+                    });
+                })
+                .then(function (result) {
+                    if (result.response.ok && result.data && result.data.ok === true) {
+                        if (submitBtn) {
+                            submitBtn.textContent = 'Request sent — we\'ll confirm soon!';
+                            submitBtn.disabled = true;
+                        }
+                        announceStatus('Your booking request was sent. We will confirm your reservation as soon as possible.');
+                        return;
+                    }
+                    isSubmitting = false;
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = originalLabel;
+                    }
+                    announceStatus(serverErrorMessage(
+                        result.data,
+                        'We could not send your request. Please try again.'
+                    ));
+                })
+                .catch(function () {
+                    isSubmitting = false;
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = originalLabel;
+                    }
+                    announceStatus('We could not send your request. Please try again.');
+                });
         });
     }
 
