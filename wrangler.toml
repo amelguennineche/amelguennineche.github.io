@@ -1,4 +1,4 @@
-name = "diving-preview"
+name = "diving-preview-booking"
 main = "src/worker.js"
 # compatibility_date is not set on any file in this repo.
 # Value below is the session date (2026-10-10) per Wrangler docs; the live Worker date is unknown.
@@ -13,6 +13,6 @@ run_worker_first = ["/api/*"]
 # database_id is FICTITIOUS and for `wrangler dev` / `d1 … --local` only.
 [[d1_databases]]
 binding = "DB"
-database_name = "beyond-sinai-bookings"
-database_id = "00000000-0000-0000-0000-000000000000"
+database_name = "diving-bookings-preview"
+database_id = "d13b2a96-829e-4c50-b0c7-1eee7e909340"
 migrations_dir = "migrations"

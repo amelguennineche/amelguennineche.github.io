@@ -258,14 +258,18 @@
             return;
         }
 
-        if (participantsField) participantsField.hidden = false;
-        setFieldEnabled(participantsInput, true, true);
-
         if (isDiving) {
             if (divingFields) divingFields.hidden = false;
             setFieldEnabled(certificationInput, true, false);
             setFieldEnabled(loggedDivesInput, true, false);
+            if (participantsField) participantsField.hidden = true;
+            setFieldEnabled(participantsInput, false, false);
+            setFieldState('participants', 'error-participants', '');
+            return;
         }
+
+        if (participantsField) participantsField.hidden = false;
+        setFieldEnabled(participantsInput, true, true);
     }
 
     function getQueryParam(name) {
@@ -355,11 +359,7 @@
 
         if (experienceType === 'liveaboard') {
             payload.divers = parseCount(fieldValue('divers'));
-        } else {
-            payload.participants = parseCount(fieldValue('participants'));
-        }
-
-        if (experienceType === 'padi-course' || experienceType === 'padi-specialty') {
+        } else if (experienceType === 'padi-course' || experienceType === 'padi-specialty') {
             var certificationLevel = fieldValue('certificationLevel');
             if (certificationLevel) {
                 payload.certificationLevel = certificationLevel;
@@ -368,6 +368,10 @@
             if (loggedDivesRaw !== '') {
                 payload.loggedDives = parseCount(loggedDivesRaw);
             }
+            // Worker still requires participants for non-liveaboard trips.
+            payload.participants = 1;
+        } else {
+            payload.participants = parseCount(fieldValue('participants'));
         }
 
         return payload;
@@ -387,7 +391,9 @@
         var country = document.getElementById('country');
         var date = document.getElementById('date');
         var selectedTrip = tripSelect && tripData[tripSelect.value] ? tripData[tripSelect.value] : null;
-        var isLiveaboard = getExperienceType(selectedTrip) === 'liveaboard';
+        var experienceType = getExperienceType(selectedTrip);
+        var isLiveaboard = experienceType === 'liveaboard';
+        var isDiving = experienceType === 'padi-course' || experienceType === 'padi-specialty';
         var valid = true;
         var firstInvalid = null;
 
@@ -430,7 +436,7 @@
                 firstInvalid = firstInvalid || diversInput;
                 valid = false;
             }
-        } else {
+        } else if (!isDiving) {
             var participantsCount = participantsInput ? parseInt(participantsInput.value, 10) : NaN;
             if (!participantsInput || participantsInput.disabled || !participantsInput.value || isNaN(participantsCount) || participantsCount < 1) {
                 setFieldState('participants', 'error-participants', 'Please enter at least 1 participant.');
