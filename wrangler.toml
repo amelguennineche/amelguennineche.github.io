@@ -7,7 +7,14 @@ compatibility_date = "2026-10-10"
 [assets]
 directory = "."
 binding = "ASSETS"
-run_worker_first = ["/api/*"]
+run_worker_first = [
+    "/api/*",
+    "/admin",
+    "/admin/",
+    "/pages/admin",
+    "/pages/admin/",
+    "/pages/admin.html"
+]
 
 # D1: local-only placeholder. Do not use wrangler d1 create / deploy until a real ID exists.
 # database_id is FICTITIOUS and for `wrangler dev` / `d1 … --local` only.

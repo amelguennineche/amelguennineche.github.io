@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="cache-control" content="no-store">
+    <title>Administration | Beyond SINAI</title>
+    <style>
+        :root {
+            color-scheme: light;
+        }
+        body {
+            margin: 0;
+            font-family: Inter, system-ui, sans-serif;
+            background: #fafaf9;
+            color: #1a1a1a;
+        }
+        main {
+            max-width: 72rem;
+            margin: 4rem auto;
+            padding: 0 1.5rem 3rem;
+        }
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        p {
+            line-height: 1.5;
+        }
+        .status {
+            min-height: 1.4em;
+            color: #5a5a5a;
+        }
+        .error {
+            color: #c0392b;
+        }
+        button {
+            margin-top: 1.25rem;
+            padding: 0.75rem 1.25rem;
+            font-size: 1rem;
+            border: 0;
+            border-radius: 12px;
+            background: #006994;
+            color: #fff;
+            cursor: pointer;
+        }
+        button:disabled {
+            opacity: 0.7;
+            cursor: wait;
+        }
+        button:focus-visible {
+            outline: 3px solid rgba(0, 105, 148, 0.35);
+            outline-offset: 2px;
+        }
+        .table-wrap {
+            margin-top: 1.5rem;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        th, td {
+            text-align: left;
+            vertical-align: top;
+            padding: 0.65rem 0.75rem;
+            border-bottom: 1px solid #e0ddd8;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        th {
+            font-weight: 600;
+            background: #f3f1ee;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>Administration</h1>
+        <p>You are signed in. Booking requests are listed below.</p>
+        <p class="status" id="status" role="status" aria-live="polite"></p>
+        <div id="bookings" class="table-wrap" hidden></div>
+        <button type="button" id="logout">Sign out</button>
+    </main>
+    <script>
+        (function () {
+            var status = document.getElementById('status');
+            var list = document.getElementById('bookings');
+            var logout = document.getElementById('logout');
+            var columns = [
+                { key: 'id', label: 'ID' },
+                { key: 'createdAt', label: 'Created' },
+                { key: 'status', label: 'Status' },
+                { key: 'fullname', label: 'Name' },
+                { key: 'email', label: 'Email' },
+                { key: 'phone', label: 'Phone' },
+                { key: 'country', label: 'Country' },
+                { key: 'trip', label: 'Trip' },
+                { key: 'tripType', label: 'Type' },
+                { key: 'preferredDate', label: 'Preferred date' },
+                { key: 'participants', label: 'Participants' },
+                { key: 'divers', label: 'Divers' },
+                { key: 'certificationLevel', label: 'Certification' },
+                { key: 'loggedDives', label: 'Logged dives' },
+                { key: 'message', label: 'Message' }
+            ];
+
+            function setStatus(message, isError) {
+                if (!status) return;
+                status.textContent = message;
+                status.className = isError ? 'status error' : 'status';
+            }
+
+            function displayValue(value) {
+                if (value == null || value === '') return '—';
+                return String(value);
+            }
+
+            function addTextCell(parent, value, isHeader) {
+                var cell = document.createElement(isHeader ? 'th' : 'td');
+                cell.textContent = value;
+                parent.appendChild(cell);
+            }
+
+            function renderBookings(bookings) {
+                if (!list) return;
+                while (list.firstChild) {
+                    list.removeChild(list.firstChild);
+                }
+                if (!bookings.length) {
+                    list.hidden = true;
+                    setStatus('No booking requests yet.');
+                    return;
+                }
+
+                var table = document.createElement('table');
+                var caption = document.createElement('caption');
+                caption.textContent = 'Booking requests';
+                table.appendChild(caption);
+
+                var thead = document.createElement('thead');
+                var headRow = document.createElement('tr');
+                var i;
+                for (i = 0; i < columns.length; i++) {
+                    addTextCell(headRow, columns[i].label, true);
+                }
+                thead.appendChild(headRow);
+                table.appendChild(thead);
+
+                var tbody = document.createElement('tbody');
+                var rowIndex;
+                for (rowIndex = 0; rowIndex < bookings.length; rowIndex++) {
+                    var booking = bookings[rowIndex] || {};
+                    var tr = document.createElement('tr');
+                    for (i = 0; i < columns.length; i++) {
+                        addTextCell(tr, displayValue(booking[columns[i].key]), false);
+                    }
+                    tbody.appendChild(tr);
+                }
+                table.appendChild(tbody);
+                list.appendChild(table);
+                list.hidden = false;
+                setStatus('Showing ' + String(bookings.length) + ' booking request' + (bookings.length === 1 ? '.' : 's.'));
+            }
+
+            function loadBookings() {
+                setStatus('Loading bookings…');
+                if (list) list.hidden = true;
+                fetch('/api/admin/bookings', {
+                    method: 'GET',
+                    credentials: 'same-origin'
+                }).then(function (res) {
+                    if (res.status === 401) {
+                        window.location.replace('/admin');
+                        return null;
+                    }
+                    if (!res.ok) {
+                        throw new Error('load-failed');
+                    }
+                    return res.json();
+                }).then(function (data) {
+                    if (!data) return;
+                    if (!data.ok || !Array.isArray(data.bookings)) {
+                        throw new Error('load-failed');
+                    }
+                    renderBookings(data.bookings);
+                }).catch(function () {
+                    if (list) {
+                        while (list.firstChild) {
+                            list.removeChild(list.firstChild);
+                        }
+                        list.hidden = true;
+                    }
+                    setStatus('Unable to load bookings. Please try again.', true);
+                });
+            }
+
+            if (logout) {
+                logout.addEventListener('click', function () {
+                    logout.disabled = true;
+                    setStatus('Signing out…');
+                    fetch('/api/admin/logout', {
+                        method: 'POST',
+                        credentials: 'same-origin',
+                        headers: { 'Content-Type': 'application/json' }
+                    }).then(function () {
+                        window.location.replace('/admin');
+                    }).catch(function () {
+                        logout.disabled = false;
+                        setStatus('Unable to sign out. Please try again.', true);
+                    });
+                });
+            }
+
+            loadBookings();
+        })();
+    </script>
+</body>
+</html>

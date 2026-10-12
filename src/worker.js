@@ -104,6 +104,337 @@ function errorResponse(status, message) {
     return jsonResponse({ ok: false, error: message }, status);
 }
 
+const ADMIN_COOKIE = 'bs_admin';
+const SESSION_TTL_SEC = 28800;
+const MAX_LOGIN_BODY_BYTES = 1024;
+
+function jsonResponseWithCookie(body, status, cookie) {
+    return new Response(JSON.stringify(body), {
+        status: status,
+        headers: {
+            'Content-Type': 'application/json; charset=utf-8',
+            'Cache-Control': 'no-store',
+            'Set-Cookie': cookie
+        }
+    });
+}
+
+function isHttpsRequest(request) {
+    return new URL(request.url).protocol === 'https:';
+}
+
+function buildSessionCookie(value, request, maxAge) {
+    var parts = [
+        ADMIN_COOKIE + '=' + value,
+        'HttpOnly',
+        'SameSite=Strict',
+        'Path=/',
+        'Max-Age=' + String(maxAge)
+    ];
+    if (isHttpsRequest(request)) {
+        parts.push('Secure');
+    }
+    return parts.join('; ');
+}
+
+function clearSessionCookie(request) {
+    return buildSessionCookie('', request, 0);
+}
+
+function isSameOriginPost(request) {
+    var origin = request.headers.get('Origin');
+    if (!origin) return false;
+    try {
+        return new URL(origin).origin === new URL(request.url).origin;
+    } catch (err) {
+        return false;
+    }
+}
+
+function bytesToBase64Url(buffer) {
+    var bytes = new Uint8Array(buffer);
+    var binary = '';
+    for (var i = 0; i < bytes.length; i++) {
+        binary += String.fromCharCode(bytes[i]);
+    }
+    return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+}
+
+function base64UrlToBytes(value) {
+    var padded = value.replace(/-/g, '+').replace(/_/g, '/');
+    var pad = padded.length % 4;
+    if (pad) {
+        padded += '===='.slice(pad);
+    }
+    var binary = atob(padded);
+    var bytes = new Uint8Array(binary.length);
+    for (var i = 0; i < binary.length; i++) {
+        bytes[i] = binary.charCodeAt(i);
+    }
+    return bytes;
+}
+
+function constantTimeEqualBytes(a, b) {
+    var len = Math.max(a.length, b.length);
+    var diff = a.length ^ b.length;
+    var i;
+    for (i = 0; i < len; i++) {
+        var av = i < a.length ? a[i] : 0;
+        var bv = i < b.length ? b[i] : 0;
+        diff |= av ^ bv;
+    }
+    return diff === 0;
+}
+
+async function importHmacKey(secret) {
+    return crypto.subtle.importKey(
+        'raw',
+        new TextEncoder().encode(secret),
+        { name: 'HMAC', hash: 'SHA-256' },
+        false,
+        ['sign']
+    );
+}
+
+async function hmacSha256(secret, message) {
+    var key = await importHmacKey(secret);
+    return crypto.subtle.sign('HMAC', key, new TextEncoder().encode(message));
+}
+
+async function passwordsMatch(provided, stored, sessionSecret) {
+    if (typeof provided !== 'string' || typeof stored !== 'string') {
+        return false;
+    }
+    var providedMac = new Uint8Array(await hmacSha256(sessionSecret, 'password:' + provided));
+    var storedMac = new Uint8Array(await hmacSha256(sessionSecret, 'password:' + stored));
+    return constantTimeEqualBytes(providedMac, storedMac);
+}
+
+async function createSessionToken(sessionSecret) {
+    var exp = Math.floor(Date.now() / 1000) + SESSION_TTL_SEC;
+    var payload = JSON.stringify({ v: 1, exp: exp });
+    var signature = bytesToBase64Url(await hmacSha256(sessionSecret, payload));
+    return bytesToBase64Url(new TextEncoder().encode(payload)) + '.' + signature;
+}
+
+async function readValidSession(token, sessionSecret) {
+    if (!token || token.indexOf('.') === -1) {
+        return false;
+    }
+    var parts = token.split('.');
+    if (parts.length !== 2) {
+        return false;
+    }
+    var payloadBytes;
+    var givenSig;
+    try {
+        payloadBytes = base64UrlToBytes(parts[0]);
+        givenSig = base64UrlToBytes(parts[1]);
+    } catch (err) {
+        return false;
+    }
+    var payload = new TextDecoder().decode(payloadBytes);
+    var expectedSig = new Uint8Array(await hmacSha256(sessionSecret, payload));
+    if (!constantTimeEqualBytes(givenSig, expectedSig)) {
+        return false;
+    }
+    var data;
+    try {
+        data = JSON.parse(payload);
+    } catch (err) {
+        return false;
+    }
+    if (!data || data.v !== 1 || typeof data.exp !== 'number') {
+        return false;
+    }
+    return data.exp > Math.floor(Date.now() / 1000);
+}
+
+function getCookie(request, name) {
+    var header = request.headers.get('Cookie');
+    if (!header) return '';
+    var parts = header.split(';');
+    var prefix = name + '=';
+    for (var i = 0; i < parts.length; i++) {
+        var piece = parts[i].trim();
+        if (piece.indexOf(prefix) === 0) {
+            return piece.slice(prefix.length);
+        }
+    }
+    return '';
+}
+
+async function handleAdminLogin(request, env) {
+    if (!isSameOriginPost(request)) {
+        return errorResponse(403, 'Forbidden.');
+    }
+    if (!env.ADMIN_PASSWORD || !env.ADMIN_SESSION_SECRET) {
+        return errorResponse(500, 'Unable to process login.');
+    }
+    var contentType = request.headers.get('content-type') || '';
+    if (contentType.indexOf('application/json') === -1) {
+        return errorResponse(415, 'Content-Type must be application/json.');
+    }
+    var declaredLength = request.headers.get('content-length');
+    if (declaredLength && Number(declaredLength) > MAX_LOGIN_BODY_BYTES) {
+        return errorResponse(413, 'Request too large.');
+    }
+    var raw = await request.text();
+    if (raw.length > MAX_LOGIN_BODY_BYTES) {
+        return errorResponse(413, 'Request too large.');
+    }
+    var payload;
+    try {
+        payload = JSON.parse(raw);
+    } catch (err) {
+        return errorResponse(400, 'Invalid JSON body.');
+    }
+    var password = payload && typeof payload.password === 'string' ? payload.password : '';
+    var matched = await passwordsMatch(password, env.ADMIN_PASSWORD, env.ADMIN_SESSION_SECRET);
+    if (!matched) {
+        return errorResponse(401, 'Invalid credentials.');
+    }
+    var token = await createSessionToken(env.ADMIN_SESSION_SECRET);
+    return jsonResponseWithCookie(
+        { ok: true },
+        200,
+        buildSessionCookie(token, request, SESSION_TTL_SEC)
+    );
+}
+
+function handleAdminLogout(request) {
+    if (!isSameOriginPost(request)) {
+        return errorResponse(403, 'Forbidden.');
+    }
+    return jsonResponseWithCookie({ ok: true }, 200, clearSessionCookie(request));
+}
+
+async function requireAdminSession(request, env) {
+    if (!env.ADMIN_SESSION_SECRET) {
+        return errorResponse(500, 'Unable to process session.');
+    }
+    var token = getCookie(request, ADMIN_COOKIE);
+    var valid = await readValidSession(token, env.ADMIN_SESSION_SECRET);
+    if (!valid) {
+        return errorResponse(401, 'Unauthorized.');
+    }
+    return null;
+}
+
+function isAdminPagePath(pathname) {
+    return pathname === '/admin' ||
+        pathname === '/admin/' ||
+        pathname === '/pages/admin' ||
+        pathname === '/pages/admin/' ||
+        pathname === '/pages/admin.html';
+}
+
+function htmlSecurityHeaders() {
+    return {
+        'Content-Type': 'text/html; charset=utf-8',
+        'Cache-Control': 'no-store, no-cache, must-revalidate, private',
+        'Pragma': 'no-cache',
+        'X-Content-Type-Options': 'nosniff',
+        'X-Robots-Tag': 'noindex, nofollow',
+        'Referrer-Policy': 'no-referrer'
+    };
+}
+
+function loginPageHtml() {
+    return '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">' +
+        '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
+        '<meta name="robots" content="noindex, nofollow">' +
+        '<title>Administration sign in | Beyond SINAI</title>' +
+        '<style>' +
+        'body{margin:0;font-family:Inter,system-ui,sans-serif;background:#fafaf9;color:#1a1a1a;}' +
+        'main{max-width:24rem;margin:4rem auto;padding:0 1.5rem;}' +
+        'h1{font-size:1.5rem;margin-bottom:1rem;}' +
+        'label{display:block;font-weight:600;margin-bottom:.4rem;}' +
+        'input{width:100%;box-sizing:border-box;padding:.85rem 1rem;font-size:1rem;border:1px solid #e0ddd8;border-radius:12px;}' +
+        'input:focus{outline:3px solid rgba(0,105,148,.25);border-color:#006994;}' +
+        'button{margin-top:1.25rem;width:100%;padding:.85rem 1rem;font-size:1rem;border:0;border-radius:12px;background:#006994;color:#fff;cursor:pointer;}' +
+        'button:disabled{opacity:.7;cursor:wait;}' +
+        '.error{min-height:1.4em;margin-top:.75rem;color:#c0392b;}' +
+        '.status{min-height:1.4em;margin-top:.5rem;color:#5a5a5a;}' +
+        '</style></head><body><main>' +
+        '<h1>Administration sign in</h1>' +
+        '<form id="login-form">' +
+        '<label for="password">Password</label>' +
+        '<input id="password" name="password" type="password" required autocomplete="current-password">' +
+        '<p class="error" id="error" role="alert"></p>' +
+        '<p class="status" id="status" role="status" aria-live="polite"></p>' +
+        '<button type="submit" id="submit">Sign in</button>' +
+        '</form>' +
+        '<script>' +
+        '(function(){' +
+        'var form=document.getElementById("login-form");' +
+        'var password=document.getElementById("password");' +
+        'var error=document.getElementById("error");' +
+        'var status=document.getElementById("status");' +
+        'var submit=document.getElementById("submit");' +
+        'form.addEventListener("submit",function(e){' +
+        'e.preventDefault();' +
+        'error.textContent="";' +
+        'status.textContent="Signing in…";' +
+        'submit.disabled=true;' +
+        'fetch("/api/admin/login",{' +
+        'method:"POST",' +
+        'credentials:"same-origin",' +
+        'headers:{"Content-Type":"application/json"},' +
+        'body:JSON.stringify({password:password.value})' +
+        '}).then(function(res){' +
+        'if(res.ok){window.location.replace("/admin");return;}' +
+        'status.textContent="";' +
+        'submit.disabled=false;' +
+        'error.textContent="Unable to sign in. Please try again.";' +
+        '}).catch(function(){' +
+        'status.textContent="";' +
+        'submit.disabled=false;' +
+        'error.textContent="Unable to sign in. Please try again.";' +
+        '});' +
+        '});' +
+        '})();' +
+        '</script></main></body></html>';
+}
+
+function loginPageResponse() {
+    return new Response(loginPageHtml(), {
+        status: 401,
+        headers: htmlSecurityHeaders()
+    });
+}
+
+async function handleAdminPage(request, env) {
+    if (request.method !== 'GET' && request.method !== 'HEAD') {
+        return errorResponse(405, 'Method not allowed.');
+    }
+    if (!env.ADMIN_SESSION_SECRET) {
+        return loginPageResponse();
+    }
+    var token = getCookie(request, ADMIN_COOKIE);
+    var valid = await readValidSession(token, env.ADMIN_SESSION_SECRET);
+    if (!valid) {
+        return loginPageResponse();
+    }
+    if (!env.ASSETS || typeof env.ASSETS.fetch !== 'function') {
+        return errorResponse(500, 'Unable to load administration.');
+    }
+    var assetUrl = new URL('/pages/admin.html', request.url);
+    var assetResponse = await env.ASSETS.fetch(new Request(assetUrl, {
+        method: 'GET',
+        headers: request.headers
+    }));
+    var headers = new Headers(assetResponse.headers);
+    var security = htmlSecurityHeaders();
+    Object.keys(security).forEach(function (name) {
+        headers.set(name, security[name]);
+    });
+    return new Response(request.method === 'HEAD' ? null : assetResponse.body, {
+        status: assetResponse.status,
+        headers: headers
+    });
+}
+
 function asString(value, maxLen) {
     if (value == null) return '';
     if (typeof value !== 'string') return null;
@@ -272,9 +603,63 @@ async function handleCreateBooking(request, env) {
     );
 }
 
+const ADMIN_BOOKINGS_LIMIT = 100;
+
+function mapAdminBookingRow(row) {
+    if (!row || typeof row !== 'object') {
+        return null;
+    }
+    return {
+        id: row.id,
+        createdAt: row.created_at,
+        status: row.status,
+        fullname: row.fullname,
+        email: row.email,
+        phone: row.phone,
+        country: row.country,
+        trip: row.trip,
+        tripType: row.trip_type,
+        preferredDate: row.preferred_date,
+        participants: row.participants,
+        divers: row.divers,
+        certificationLevel: row.certification_level,
+        loggedDives: row.logged_dives,
+        message: row.message
+    };
+}
+
+async function handleAdminBookingsList(env) {
+    if (!env.DB) {
+        return errorResponse(500, 'Database binding is not configured.');
+    }
+    var result = await env.DB.prepare(
+        'SELECT id, created_at, status, fullname, email, phone, country, trip, trip_type, preferred_date, participants, divers, certification_level, logged_dives, message FROM bookings ORDER BY id DESC LIMIT ?'
+    )
+        .bind(ADMIN_BOOKINGS_LIMIT)
+        .all();
+    var rows = result && Array.isArray(result.results) ? result.results : [];
+    var bookings = [];
+    var i;
+    for (i = 0; i < rows.length; i++) {
+        var mapped = mapAdminBookingRow(rows[i]);
+        if (mapped) {
+            bookings.push(mapped);
+        }
+    }
+    return jsonResponse({ ok: true, bookings: bookings }, 200);
+}
+
 export default {
     async fetch(request, env) {
         var url = new URL(request.url);
+
+        if (isAdminPagePath(url.pathname)) {
+            try {
+                return await handleAdminPage(request, env);
+            } catch (err) {
+                return errorResponse(500, 'Unable to load administration.');
+            }
+        }
 
         if (!url.pathname.startsWith('/api/')) {
             return new Response('Not found', { status: 404 });
@@ -289,6 +674,47 @@ export default {
                 }
             }
             return errorResponse(405, 'Method not allowed.');
+        }
+
+        if (url.pathname.startsWith('/api/admin/')) {
+            if (url.pathname === '/api/admin/login') {
+                if (request.method !== 'POST') {
+                    return errorResponse(405, 'Method not allowed.');
+                }
+                try {
+                    return await handleAdminLogin(request, env);
+                } catch (err) {
+                    return errorResponse(500, 'Unable to process login.');
+                }
+            }
+            if (url.pathname === '/api/admin/logout') {
+                if (request.method !== 'POST') {
+                    return errorResponse(405, 'Method not allowed.');
+                }
+                try {
+                    return handleAdminLogout(request);
+                } catch (err) {
+                    return errorResponse(500, 'Unable to process logout.');
+                }
+            }
+            var authError = await requireAdminSession(request, env);
+            if (authError) {
+                return authError;
+            }
+            if (url.pathname === '/api/admin/session' && request.method === 'GET') {
+                return jsonResponse({ ok: true }, 200);
+            }
+            if (url.pathname === '/api/admin/bookings') {
+                if (request.method !== 'GET') {
+                    return errorResponse(405, 'Method not allowed.');
+                }
+                try {
+                    return await handleAdminBookingsList(env);
+                } catch (err) {
+                    return errorResponse(500, 'Unable to load bookings.');
+                }
+            }
+            return errorResponse(404, 'Not found.');
         }
 
         return errorResponse(404, 'Not found.');
