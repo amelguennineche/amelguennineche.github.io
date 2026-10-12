@@ -649,6 +649,65 @@ async function handleAdminBookingsList(env) {
     return jsonResponse({ ok: true, bookings: bookings }, 200);
 }
 
+const ADMIN_BOOKING_STATUSES = {
+    pending: true,
+    confirmed: true,
+    cancelled: true
+};
+
+function parseAdminBookingId(pathname) {
+    var match = pathname.match(/^\/api\/admin\/bookings\/([1-9][0-9]*)$/);
+    if (!match) {
+        return null;
+    }
+    var id = Number(match[1]);
+    if (!Number.isInteger(id) || id < 1) {
+        return null;
+    }
+    return id;
+}
+
+async function handleAdminBookingStatusPatch(request, env, bookingId) {
+    if (!isSameOriginPost(request)) {
+        return errorResponse(403, 'Forbidden.');
+    }
+    if (!env.DB) {
+        return errorResponse(500, 'Database binding is not configured.');
+    }
+    var contentType = request.headers.get('content-type') || '';
+    if (contentType.indexOf('application/json') === -1) {
+        return errorResponse(415, 'Content-Type must be application/json.');
+    }
+    var declaredLength = request.headers.get('content-length');
+    if (declaredLength && Number(declaredLength) > MAX_LOGIN_BODY_BYTES) {
+        return errorResponse(413, 'Request too large.');
+    }
+    var raw = await request.text();
+    if (raw.length > MAX_LOGIN_BODY_BYTES) {
+        return errorResponse(413, 'Request too large.');
+    }
+    var payload;
+    try {
+        payload = JSON.parse(raw);
+    } catch (err) {
+        return errorResponse(400, 'Invalid JSON body.');
+    }
+    var nextStatus = payload && typeof payload.status === 'string' ? payload.status : '';
+    if (!ADMIN_BOOKING_STATUSES[nextStatus]) {
+        return errorResponse(400, 'Invalid status.');
+    }
+    var result = await env.DB.prepare('UPDATE bookings SET status = ? WHERE id = ?')
+        .bind(nextStatus, bookingId)
+        .run();
+    var changes = result && result.meta && typeof result.meta.changes === 'number'
+        ? result.meta.changes
+        : 0;
+    if (changes < 1) {
+        return errorResponse(404, 'Booking not found.');
+    }
+    return jsonResponse({ ok: true, id: bookingId, status: nextStatus }, 200);
+}
+
 export default {
     async fetch(request, env) {
         var url = new URL(request.url);
@@ -712,6 +771,20 @@ export default {
                     return await handleAdminBookingsList(env);
                 } catch (err) {
                     return errorResponse(500, 'Unable to load bookings.');
+                }
+            }
+            if (url.pathname.indexOf('/api/admin/bookings/') === 0) {
+                if (request.method !== 'PATCH') {
+                    return errorResponse(405, 'Method not allowed.');
+                }
+                var bookingId = parseAdminBookingId(url.pathname);
+                if (bookingId == null) {
+                    return errorResponse(400, 'Invalid booking id.');
+                }
+                try {
+                    return await handleAdminBookingStatusPatch(request, env, bookingId);
+                } catch (err) {
+                    return errorResponse(500, 'Unable to update booking.');
                 }
             }
             return errorResponse(404, 'Not found.');

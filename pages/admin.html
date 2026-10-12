@@ -53,6 +53,10 @@
             outline: 3px solid rgba(0, 105, 148, 0.35);
             outline-offset: 2px;
         }
+        select:focus-visible {
+            outline: 3px solid rgba(0, 105, 148, 0.35);
+            outline-offset: 2px;
+        }
         .table-wrap {
             margin-top: 1.5rem;
             overflow-x: auto;
@@ -74,6 +78,23 @@
             font-weight: 600;
             background: #f3f1ee;
         }
+        .status-cell {
+            white-space: nowrap;
+        }
+        .status-select {
+            display: block;
+            min-width: 10rem;
+            padding: 0.4rem 0.5rem;
+            font-size: 0.9rem;
+            border: 1px solid #e0ddd8;
+            border-radius: 8px;
+            background: #fff;
+        }
+        .row-action {
+            margin-top: 0.5rem;
+            padding: 0.4rem 0.8rem;
+            font-size: 0.85rem;
+        }
     </style>
 </head>
 <body>
@@ -89,6 +110,11 @@
             var status = document.getElementById('status');
             var list = document.getElementById('bookings');
             var logout = document.getElementById('logout');
+            var statusOptions = [
+                { value: 'pending', label: 'Pending' },
+                { value: 'confirmed', label: 'Confirmed' },
+                { value: 'cancelled', label: 'Cancelled' }
+            ];
             var columns = [
                 { key: 'id', label: 'ID' },
                 { key: 'createdAt', label: 'Created' },
@@ -121,6 +147,45 @@
             function addTextCell(parent, value, isHeader) {
                 var cell = document.createElement(isHeader ? 'th' : 'td');
                 cell.textContent = value;
+                parent.appendChild(cell);
+                return cell;
+            }
+
+            function allowedStatus(value) {
+                var i;
+                for (i = 0; i < statusOptions.length; i++) {
+                    if (statusOptions[i].value === value) return value;
+                }
+                return 'pending';
+            }
+
+            function addStatusCell(parent, booking) {
+                var cell = document.createElement('td');
+                cell.className = 'status-cell';
+                var select = document.createElement('select');
+                select.className = 'status-select';
+                select.setAttribute('aria-label', 'Status for booking ' + String(booking.id));
+                var current = allowedStatus(booking.status);
+                var i;
+                for (i = 0; i < statusOptions.length; i++) {
+                    var option = document.createElement('option');
+                    option.value = statusOptions[i].value;
+                    option.textContent = statusOptions[i].label;
+                    if (statusOptions[i].value === current) {
+                        option.selected = true;
+                    }
+                    select.appendChild(option);
+                }
+                select.value = current;
+                var save = document.createElement('button');
+                save.type = 'button';
+                save.className = 'row-action';
+                save.textContent = 'Save';
+                save.addEventListener('click', function () {
+                    saveBookingStatus(booking.id, select, save);
+                });
+                cell.appendChild(select);
+                cell.appendChild(save);
                 parent.appendChild(cell);
             }
 
@@ -155,20 +220,25 @@
                     var booking = bookings[rowIndex] || {};
                     var tr = document.createElement('tr');
                     for (i = 0; i < columns.length; i++) {
-                        addTextCell(tr, displayValue(booking[columns[i].key]), false);
+                        if (columns[i].key === 'status') {
+                            addStatusCell(tr, booking);
+                        } else {
+                            addTextCell(tr, displayValue(booking[columns[i].key]), false);
+                        }
                     }
                     tbody.appendChild(tr);
                 }
                 table.appendChild(tbody);
                 list.appendChild(table);
                 list.hidden = false;
-                setStatus('Showing ' + String(bookings.length) + ' booking request' + (bookings.length === 1 ? '.' : 's.'));
             }
 
-            function loadBookings() {
-                setStatus('Loading bookings…');
-                if (list) list.hidden = true;
-                fetch('/api/admin/bookings', {
+            function loadBookings(successMessage) {
+                if (!successMessage) {
+                    setStatus('Loading bookings…');
+                    if (list) list.hidden = true;
+                }
+                return fetch('/api/admin/bookings', {
                     method: 'GET',
                     credentials: 'same-origin'
                 }).then(function (res) {
@@ -186,6 +256,11 @@
                         throw new Error('load-failed');
                     }
                     renderBookings(data.bookings);
+                    if (successMessage) {
+                        setStatus(successMessage);
+                    } else if (data.bookings.length) {
+                        setStatus('Showing ' + String(data.bookings.length) + ' booking request' + (data.bookings.length === 1 ? '.' : 's.'));
+                    }
                 }).catch(function () {
                     if (list) {
                         while (list.firstChild) {
@@ -194,6 +269,43 @@
                         list.hidden = true;
                     }
                     setStatus('Unable to load bookings. Please try again.', true);
+                });
+            }
+
+            function saveBookingStatus(bookingId, select, button) {
+                var nextStatus = allowedStatus(select.value);
+                if (nextStatus === 'cancelled') {
+                    var confirmed = window.confirm('Cancel this booking request?');
+                    if (!confirmed) {
+                        return;
+                    }
+                }
+                select.disabled = true;
+                button.disabled = true;
+                fetch('/api/admin/bookings/' + String(bookingId), {
+                    method: 'PATCH',
+                    credentials: 'same-origin',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: nextStatus })
+                }).then(function (res) {
+                    if (res.status === 401) {
+                        window.location.replace('/admin');
+                        return null;
+                    }
+                    if (!res.ok) {
+                        throw new Error('save-failed');
+                    }
+                    return res.json();
+                }).then(function (data) {
+                    if (!data) return;
+                    if (!data.ok || !data.status) {
+                        throw new Error('save-failed');
+                    }
+                    return loadBookings('Booking ' + String(data.id) + ' updated to ' + String(data.status) + '.');
+                }).catch(function () {
+                    select.disabled = false;
+                    button.disabled = false;
+                    setStatus('Unable to update booking. Please try again.', true);
                 });
             }
 
