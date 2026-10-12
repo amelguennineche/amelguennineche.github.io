@@ -49,22 +49,56 @@
             opacity: 0.7;
             cursor: wait;
         }
-        button:focus-visible {
+        button:focus-visible,
+        select:focus-visible,
+        input:focus-visible {
             outline: 3px solid rgba(0, 105, 148, 0.35);
             outline-offset: 2px;
         }
-        select:focus-visible {
-            outline: 3px solid rgba(0, 105, 148, 0.35);
-            outline-offset: 2px;
+        .filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+            gap: 0.85rem 1rem;
+            margin: 1.25rem 0 0.5rem;
+            padding: 1rem;
+            background: #fff;
+            border: 1px solid #e0ddd8;
+            border-radius: 12px;
+        }
+        .filters label {
+            display: block;
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 0.35rem;
+        }
+        .filters input,
+        .filters select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 0.5rem 0.65rem;
+            font-size: 1rem;
+            border: 1px solid #e0ddd8;
+            border-radius: 8px;
+            background: #fff;
         }
         .table-wrap {
-            margin-top: 1.5rem;
+            margin-top: 1rem;
             overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border: 1px solid #e0ddd8;
+            border-radius: 12px;
+            background: #fff;
         }
         table {
             width: 100%;
+            min-width: 64rem;
             border-collapse: collapse;
             font-size: 0.9rem;
+        }
+        caption {
+            text-align: left;
+            padding: 0.75rem 0.85rem;
+            font-weight: 600;
         }
         th, td {
             text-align: left;
@@ -77,6 +111,12 @@
         th {
             font-weight: 600;
             background: #f3f1ee;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+        tbody tr:nth-child(even) {
+            background: #fafaf9;
         }
         .status-cell {
             white-space: nowrap;
@@ -95,12 +135,55 @@
             padding: 0.4rem 0.8rem;
             font-size: 0.85rem;
         }
+        .message-cell {
+            max-width: 16rem;
+            max-height: 6.5rem;
+            overflow: auto;
+        }
+        @media (max-width: 640px) {
+            main {
+                margin: 1.5rem auto;
+                padding: 0 1rem 2rem;
+            }
+            .filters {
+                grid-template-columns: 1fr;
+            }
+            table {
+                font-size: 0.85rem;
+            }
+        }
     </style>
 </head>
 <body>
     <main>
         <h1>Administration</h1>
         <p>You are signed in. Booking requests are listed below.</p>
+        <form id="filters" class="filters" hidden>
+            <div>
+                <label for="filter-search">Search name or email</label>
+                <input id="filter-search" type="search" autocomplete="off" spellcheck="false">
+            </div>
+            <div>
+                <label for="filter-status">Status</label>
+                <select id="filter-status">
+                    <option value="all">All</option>
+                    <option value="pending">Pending</option>
+                    <option value="confirmed">Confirmed</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+            </div>
+            <div>
+                <label for="filter-date-field">Date field</label>
+                <select id="filter-date-field">
+                    <option value="preferredDate">Preferred date</option>
+                    <option value="createdAt">Created date</option>
+                </select>
+            </div>
+            <div>
+                <label for="filter-date">Date</label>
+                <input id="filter-date" type="date">
+            </div>
+        </form>
         <p class="status" id="status" role="status" aria-live="polite"></p>
         <div id="bookings" class="table-wrap" hidden></div>
         <button type="button" id="logout">Sign out</button>
@@ -110,6 +193,12 @@
             var status = document.getElementById('status');
             var list = document.getElementById('bookings');
             var logout = document.getElementById('logout');
+            var filtersForm = document.getElementById('filters');
+            var searchInput = document.getElementById('filter-search');
+            var statusFilter = document.getElementById('filter-status');
+            var dateFieldFilter = document.getElementById('filter-date-field');
+            var dateFilter = document.getElementById('filter-date');
+            var allBookings = [];
             var statusOptions = [
                 { value: 'pending', label: 'Pending' },
                 { value: 'confirmed', label: 'Confirmed' },
@@ -144,9 +233,10 @@
                 return String(value);
             }
 
-            function addTextCell(parent, value, isHeader) {
+            function addTextCell(parent, value, isHeader, className) {
                 var cell = document.createElement(isHeader ? 'th' : 'td');
                 cell.textContent = value;
+                if (className) cell.className = className;
                 parent.appendChild(cell);
                 return cell;
             }
@@ -157,6 +247,49 @@
                     if (statusOptions[i].value === value) return value;
                 }
                 return 'pending';
+            }
+
+            function bookingDay(value) {
+                if (value == null || value === '') return '';
+                return String(value).slice(0, 10);
+            }
+
+            function matchesFilters(booking) {
+                var query = searchInput && searchInput.value
+                    ? searchInput.value.trim().toLowerCase()
+                    : '';
+                if (query) {
+                    var name = String(booking.fullname || '').toLowerCase();
+                    var email = String(booking.email || '').toLowerCase();
+                    if (name.indexOf(query) === -1 && email.indexOf(query) === -1) {
+                        return false;
+                    }
+                }
+                var selectedStatus = statusFilter ? statusFilter.value : 'all';
+                if (selectedStatus && selectedStatus !== 'all' && booking.status !== selectedStatus) {
+                    return false;
+                }
+                var selectedDate = dateFilter ? dateFilter.value : '';
+                if (selectedDate) {
+                    var field = dateFieldFilter && dateFieldFilter.value === 'createdAt'
+                        ? 'createdAt'
+                        : 'preferredDate';
+                    if (bookingDay(booking[field]) !== selectedDate) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+
+            function filteredBookings() {
+                var result = [];
+                var i;
+                for (i = 0; i < allBookings.length; i++) {
+                    if (matchesFilters(allBookings[i])) {
+                        result.push(allBookings[i]);
+                    }
+                }
+                return result;
             }
 
             function addStatusCell(parent, booking) {
@@ -196,7 +329,6 @@
                 }
                 if (!bookings.length) {
                     list.hidden = true;
-                    setStatus('No booking requests yet.');
                     return;
                 }
 
@@ -223,7 +355,12 @@
                         if (columns[i].key === 'status') {
                             addStatusCell(tr, booking);
                         } else {
-                            addTextCell(tr, displayValue(booking[columns[i].key]), false);
+                            addTextCell(
+                                tr,
+                                displayValue(booking[columns[i].key]),
+                                false,
+                                columns[i].key === 'message' ? 'message-cell' : ''
+                            );
                         }
                     }
                     tbody.appendChild(tr);
@@ -231,6 +368,25 @@
                 table.appendChild(tbody);
                 list.appendChild(table);
                 list.hidden = false;
+            }
+
+            function applyFilters() {
+                if (!allBookings.length) {
+                    renderBookings([]);
+                    setStatus('No booking requests yet.');
+                    return;
+                }
+                var visible = filteredBookings();
+                renderBookings(visible);
+                if (!visible.length) {
+                    setStatus('No booking requests match these filters.');
+                    return;
+                }
+                if (visible.length === allBookings.length) {
+                    setStatus('Showing ' + String(visible.length) + ' booking request' + (visible.length === 1 ? '.' : 's.'));
+                    return;
+                }
+                setStatus('Showing ' + String(visible.length) + ' of ' + String(allBookings.length) + ' booking requests.');
             }
 
             function loadBookings(successMessage) {
@@ -255,13 +411,14 @@
                     if (!data.ok || !Array.isArray(data.bookings)) {
                         throw new Error('load-failed');
                     }
-                    renderBookings(data.bookings);
+                    allBookings = data.bookings;
+                    if (filtersForm) filtersForm.hidden = false;
+                    applyFilters();
                     if (successMessage) {
                         setStatus(successMessage);
-                    } else if (data.bookings.length) {
-                        setStatus('Showing ' + String(data.bookings.length) + ' booking request' + (data.bookings.length === 1 ? '.' : 's.'));
                     }
                 }).catch(function () {
+                    allBookings = [];
                     if (list) {
                         while (list.firstChild) {
                             list.removeChild(list.firstChild);
@@ -307,6 +464,25 @@
                     button.disabled = false;
                     setStatus('Unable to update booking. Please try again.', true);
                 });
+            }
+
+            if (filtersForm) {
+                filtersForm.addEventListener('submit', function (event) {
+                    event.preventDefault();
+                    applyFilters();
+                });
+            }
+            if (searchInput) {
+                searchInput.addEventListener('input', applyFilters);
+            }
+            if (statusFilter) {
+                statusFilter.addEventListener('change', applyFilters);
+            }
+            if (dateFieldFilter) {
+                dateFieldFilter.addEventListener('change', applyFilters);
+            }
+            if (dateFilter) {
+                dateFilter.addEventListener('change', applyFilters);
             }
 
             if (logout) {
